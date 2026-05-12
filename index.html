@@ -1,0 +1,1346 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexia — Votre business, propulsé par l'IA</title>
+    <meta
+      name="description"
+      content="Nexia, agence IA premium : site vitrine, chatbot IA et automatisations."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050611;
+        --bg-2: #090c22;
+        --card: rgba(15, 20, 52, 0.62);
+        --text: #f0f3ff;
+        --muted: #b3bce9;
+        --primary: #6a6bff;
+        --secondary: #45d6ff;
+        --accent: #ba57ff;
+        --ok: #63ffc0;
+        --border: rgba(129, 142, 255, 0.32);
+        --border-strong: rgba(146, 158, 255, 0.5);
+        --radius-lg: 24px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 14% 0%, rgba(69, 214, 255, 0.16), transparent 35%),
+          radial-gradient(circle at 90% 6%, rgba(186, 87, 255, 0.18), transparent 34%),
+          linear-gradient(180deg, var(--bg) 0%, #07091a 40%, #04050d 100%);
+        line-height: 1.58;
+        overflow-x: hidden;
+      }
+
+      .grid-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -2;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(circle at center, black, transparent 78%);
+        animation: gridShift 24s linear infinite;
+      }
+
+      .scroll-glow {
+        position: fixed;
+        width: 420px;
+        height: 420px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(86, 172, 255, 0.24), rgba(186, 87, 255, 0.07) 50%, transparent 72%);
+        filter: blur(22px);
+        pointer-events: none;
+        z-index: -1;
+        transform: translate(-50%, -50%);
+        opacity: 0.85;
+      }
+
+      .hero-particles {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .hero-particles span {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(103, 205, 255, 0.8);
+        box-shadow: 0 0 16px rgba(103, 205, 255, 0.7);
+        animation: floatUp linear infinite;
+      }
+
+      @keyframes floatUp {
+        from { transform: translateY(34px) scale(0.8); opacity: 0; }
+        20% { opacity: 1; }
+        to { transform: translateY(-260px) scale(1.15); opacity: 0; }
+      }
+      @keyframes gridShift {
+        from { transform: translateY(0); }
+        to { transform: translateY(48px); }
+      }
+
+      .wrap { width: min(1160px, 92%); margin: 0 auto; }
+      .glass {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 20px 40px rgba(4, 7, 24, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+      .section { padding: 92px 0; }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #d4dcff;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+      .tag-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: linear-gradient(120deg, var(--secondary), var(--accent));
+        box-shadow: 0 0 16px rgba(69, 214, 255, 0.8);
+      }
+      .title { margin: 0 0 14px; font-size: clamp(1.8rem, 2.8vw, 2.7rem); line-height: 1.12; }
+      .lead { margin: 0; color: var(--muted); max-width: 760px; }
+      .reveal { opacity: 0; transform: translateY(20px) scale(0.99); transition: transform 0.65s cubic-bezier(0.2, 0.85, 0.2, 1), opacity 0.65s ease; }
+      .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid rgba(133, 145, 255, 0.2);
+        backdrop-filter: blur(6px);
+        background: rgba(5, 6, 17, 0.48);
+        transition: background 0.25s ease, backdrop-filter 0.25s ease, border-color 0.25s ease;
+      }
+      .nav.scrolled {
+        background: rgba(5, 8, 23, 0.85);
+        backdrop-filter: blur(14px);
+        border-color: rgba(145, 156, 255, 0.35);
+      }
+      .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; }
+      .brand {
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 1.2rem;
+        letter-spacing: 0.03em;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .nav .brand {
+        font-size: clamp(1.8rem, 2.4vw, 2rem);
+      }
+      .brand span {
+        background: linear-gradient(120deg, #d4d8ff 0%, #82ddff 45%, #cf7cff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .nav-links { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
+      .nav-links a { color: #d4ddff; text-decoration: none; font-size: 0.92rem; }
+
+      .btn {
+        border: 0;
+        border-radius: 12px;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 18px;
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+        will-change: transform;
+      }
+      .btn:hover { transform: translateY(-2px); }
+      .btn-primary { color: #fff; background: linear-gradient(120deg, var(--primary), var(--accent)); box-shadow: 0 14px 32px rgba(111, 107, 255, 0.38); }
+      .btn-secondary { color: #eaf0ff; background: rgba(122, 138, 255, 0.16); border: 1px solid rgba(137, 149, 255, 0.38); }
+
+      .hero {
+        position: relative;
+        padding: 88px 0 36px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+        gap: clamp(28px, 5vw, 56px);
+        align-items: center;
+      }
+      .hero-copy {
+        padding: 8px 0 24px;
+        position: relative;
+        max-width: 560px;
+      }
+      .hero-copy h1 {
+        margin: 0 0 20px;
+        font-size: clamp(2.35rem, 5.2vw, 3.65rem);
+        line-height: 1.04;
+        letter-spacing: -0.035em;
+        font-weight: 800;
+      }
+      .hero-copy p {
+        margin: 0;
+        color: #a8b4e8;
+        font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+        line-height: 1.62;
+        max-width: 520px;
+      }
+      .hero-stats-bar {
+        margin-top: 48px;
+        padding-top: 28px;
+        border-top: 1px solid rgba(110, 124, 200, 0.2);
+      }
+      .hero-stats-inline {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
+        gap: clamp(12px, 3vw, 28px);
+      }
+      .hero-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        border-radius: 14px;
+        border: 1px solid rgba(120, 135, 220, 0.22);
+        background: rgba(8, 11, 28, 0.55);
+        flex: 1 1 200px;
+        max-width: 320px;
+        min-width: min(100%, 220px);
+      }
+      .hero-stat-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: rgba(106, 107, 255, 0.12);
+        border: 1px solid rgba(140, 152, 255, 0.28);
+        color: #c8d4ff;
+      }
+      .hero-stat-icon svg { width: 22px; height: 22px; display: block; }
+      .hero-stat-text {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #e8edff;
+        letter-spacing: -0.02em;
+        line-height: 1.35;
+      }
+
+      .hero-chat-column {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        min-height: 0;
+      }
+      .hero-chat-glow {
+        width: 100%;
+        max-width: 520px;
+        padding: 4px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, rgba(69, 214, 255, 0.65), rgba(106, 107, 255, 0.55), rgba(186, 87, 255, 0.65));
+        box-shadow:
+          0 0 0 1px rgba(130, 150, 255, 0.35),
+          0 28px 64px rgba(60, 30, 120, 0.55),
+          0 0 100px rgba(69, 214, 255, 0.28),
+          0 0 140px rgba(186, 87, 255, 0.28),
+          0 0 200px rgba(99, 80, 220, 0.12);
+        animation: heroGlowPulse 5s ease-in-out infinite;
+      }
+      @keyframes heroGlowPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.88; }
+      }
+      .hero-chat-window {
+        border-radius: 20px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #080b14 0%, #05060d 100%);
+        border: 1px solid rgba(88, 102, 180, 0.5);
+        display: flex;
+        flex-direction: column;
+        min-height: min(520px, 58vh);
+        max-height: min(620px, 68vh);
+      }
+      .hero-chat-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid rgba(70, 82, 140, 0.45);
+        background: rgba(12, 15, 28, 0.98);
+      }
+      .hero-chat-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        display: grid;
+        place-items: center;
+        font-size: 0.75rem;
+        font-weight: 900;
+        color: #fff;
+      }
+      .hero-chat-title { font-weight: 800; font-size: 0.98rem; letter-spacing: 0.02em; }
+      .hero-chat-sub { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+      .hero-chat-msgs {
+        flex: 1;
+        overflow-y: auto;
+        padding: 14px 12px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        scroll-behavior: smooth;
+      }
+      .hero-msg-row { display: flex; width: 100%; }
+      .hero-msg-row--ia { justify-content: flex-start; }
+      .hero-msg-row--patient { justify-content: flex-end; }
+      .hero-msg {
+        max-width: 92%;
+        padding: 12px 16px 13px;
+        border-radius: 20px;
+        font-size: 0.93rem;
+        line-height: 1.45;
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+        animation: msgIn 0.38s cubic-bezier(0.2, 0.85, 0.2, 1) forwards;
+      }
+      @keyframes msgIn {
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+      .hero-msg--ia {
+        background: #1c2033;
+        color: #e8ecff;
+        border: 1px solid rgba(100, 110, 180, 0.35);
+        border-bottom-left-radius: 5px;
+      }
+      .hero-msg--patient {
+        background: linear-gradient(145deg, rgba(58, 72, 255, 0.95), rgba(120, 60, 200, 0.88));
+        color: #f6f7ff;
+        border: 1px solid rgba(160, 140, 255, 0.35);
+        border-bottom-right-radius: 5px;
+      }
+      .hero-msg-meta {
+        font-size: 0.65rem;
+        color: rgba(200, 210, 255, 0.45);
+        margin-top: 5px;
+      }
+      .hero-typing {
+        display: none;
+        align-self: flex-start;
+        margin-top: auto;
+        margin-bottom: 2px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        border-bottom-left-radius: 5px;
+        background: #1c2033;
+        border: 1px solid rgba(100, 110, 180, 0.35);
+        gap: 5px;
+        align-items: center;
+      }
+      .hero-typing.is-visible { display: inline-flex; }
+      .hero-typing span {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(180, 195, 255, 0.55);
+        animation: typingDot 1.1s ease-in-out infinite;
+      }
+      .hero-typing span:nth-child(2) { animation-delay: 0.15s; }
+      .hero-typing span:nth-child(3) { animation-delay: 0.3s; }
+      @keyframes typingDot {
+        0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+        40% { transform: translateY(-5px); opacity: 1; }
+      }
+
+      .tilt { transform-style: preserve-3d; transition: transform 0.22s ease, border-color 0.22s ease; }
+      .services-grid, .how-grid, .pricing-grid, .testimonials-grid, .faq-grid {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        align-items: start;
+      }
+      .pricing-grid { padding-top: 16px; }
+      .service, .step, .price, .testimonial, .faq-item { padding: 24px; }
+      .service h3, .step h3, .price h3, .testimonial h3 { margin: 0 0 8px; }
+      .service p, .step p, .price p, .testimonial p, .faq-item p { margin: 0; color: var(--muted); }
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        background: linear-gradient(120deg, rgba(106, 107, 255, 0.35), rgba(69, 214, 255, 0.3));
+        border: 1px solid rgba(149, 160, 255, 0.44);
+      }
+
+      .project { margin-top: 30px; padding: 26px; }
+      .showcase-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 12px;
+      }
+      .made-by-badge {
+        display: inline-block;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #ecf7ff;
+        border: 1px solid rgba(133, 229, 255, 0.5);
+        background: linear-gradient(120deg, rgba(69, 214, 255, 0.24), rgba(186, 87, 255, 0.22));
+      }
+      .made-by-on-shot {
+        position: absolute;
+        top: 46px;
+        left: 12px;
+        z-index: 4;
+        margin: 0;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        animation: badgePulse 3s ease-in-out infinite;
+      }
+      @keyframes badgePulse {
+        0%, 100% { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 0 0 rgba(186, 87, 255, 0.35); }
+        50% { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 22px 2px rgba(186, 87, 255, 0.45); }
+      }
+      .browser-shot {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(144, 156, 255, 0.33);
+        background: #0b102d;
+        position: relative;
+      }
+      .browser-head {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(136, 148, 255, 0.24);
+        background: rgba(20, 25, 63, 0.9);
+      }
+      .browser-head i {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        display: inline-block;
+      }
+      .browser-head i:nth-child(1) { background: #ff6f7a; }
+      .browser-head i:nth-child(2) { background: #ffc857; }
+      .browser-head i:nth-child(3) { background: #63ffc0; }
+      .browser-head span {
+        margin-left: 8px;
+        color: #c9d4ff;
+        font-size: 0.79rem;
+      }
+      .scroll-viewport {
+        height: 290px;
+        overflow: hidden;
+      }
+      .scroll-track {
+        will-change: transform;
+      }
+      .scroll-track-double {
+        animation: siteScrollLoop 18s linear infinite;
+      }
+      .browser-shot img {
+        width: 100%;
+        display: block;
+        /* Rogne le bas de la capture (bannière cookies / bandeau fixe) */
+        clip-path: inset(0 0 11% 0);
+      }
+      .shot-overlay {
+        position: absolute;
+        inset: auto 12px 12px auto;
+        font-size: 0.72rem;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 5px 9px;
+        color: #e9f8ff;
+        background: rgba(8, 11, 30, 0.72);
+        border: 1px solid rgba(153, 164, 255, 0.43);
+      }
+      .chatbot-vignette {
+        border-radius: 16px;
+        border: 1px solid rgba(144, 156, 255, 0.35);
+        background:
+          radial-gradient(circle at 20% 20%, rgba(69, 214, 255, 0.08), transparent 45%),
+          linear-gradient(165deg, rgba(12, 16, 42, 0.98), rgba(8, 11, 28, 0.96));
+        padding: 16px 12px 14px;
+        position: relative;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .chatbot-vignette::before {
+        content: "premiereterre.fr";
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-size: 0.72rem;
+        color: var(--muted);
+        opacity: 0.85;
+      }
+      .chatbot-launcher {
+        position: absolute;
+        bottom: 14px;
+        right: 14px;
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 10px 24px rgba(111, 107, 255, 0.45);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+      }
+      .chatbot-mini {
+        border-radius: 14px;
+        border: 1px solid rgba(144, 156, 255, 0.4);
+        background: rgba(10, 14, 36, 0.92);
+        padding: 12px;
+        margin-right: 52px;
+        margin-bottom: 4px;
+        box-shadow: 0 16px 36px rgba(4, 6, 20, 0.55);
+      }
+      .chatbot-mini h4 {
+        margin: 0 0 10px;
+        font-size: 0.95rem;
+        color: #dbe6ff;
+      }
+      .mini-msg {
+        margin-bottom: 8px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 0.84rem;
+        line-height: 1.35;
+      }
+      .mini-msg.bot {
+        background: rgba(77, 95, 255, 0.22);
+        border: 1px solid rgba(136, 148, 255, 0.35);
+      }
+      .mini-msg.user {
+        background: rgba(69, 214, 255, 0.14);
+        border: 1px solid rgba(123, 228, 255, 0.3);
+      }
+      .chatbot-pill {
+        margin-top: 8px;
+        font-size: 0.74rem;
+        color: #cfddff;
+      }
+      @keyframes siteScrollLoop {
+        from { transform: translateY(0); }
+        to { transform: translateY(-50%); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-track-double { animation: none; }
+        .made-by-on-shot { animation: none; }
+        .hero-chat-glow { animation: none; }
+        .hero-typing span { animation: none; }
+        .hero-msg { animation: none !important; opacity: 1 !important; transform: none !important; }
+      }
+      .metrics {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+      .metric {
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(136, 148, 255, 0.25);
+        background: rgba(103, 115, 255, 0.08);
+      }
+      .metric strong { display: block; font-size: 1.3rem; }
+      .metric span { color: var(--muted); font-size: 0.82rem; }
+
+      .pricing-banner {
+        margin-top: 20px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        font-weight: 700;
+        color: #fff2d6;
+        border: 1px solid rgba(255, 185, 77, 0.45);
+        background: linear-gradient(120deg, rgba(255, 132, 0, 0.17), rgba(186, 87, 255, 0.22));
+        box-shadow: 0 12px 28px rgba(191, 107, 28, 0.18);
+      }
+      .price-pop {
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(180deg, rgba(26, 22, 88, 0.96), rgba(15, 18, 59, 0.95));
+        transform: scale(1.1);
+        border-color: rgba(172, 130, 255, 0.58);
+        box-shadow:
+          0 0 0 1px rgba(165, 118, 255, 0.4),
+          0 26px 50px rgba(104, 44, 171, 0.42),
+          0 0 64px rgba(157, 74, 255, 0.48),
+          0 0 120px rgba(120, 60, 220, 0.22);
+      }
+      .price-pop::before {
+        content: "Le plus choisi";
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 0.73rem;
+        border-radius: 999px;
+        padding: 4px 9px;
+        color: #dff8ff;
+        border: 1px solid rgba(120, 228, 255, 0.42);
+        background: rgba(69, 214, 255, 0.16);
+      }
+      .price-pop::after {
+        content: "GAME CHANGER";
+        position: absolute;
+        top: -14px;
+        left: 14px;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        font-weight: 800;
+        border-radius: 999px;
+        padding: 5px 10px;
+        color: #f7e9ff;
+        border: 1px solid rgba(222, 171, 255, 0.58);
+        background: linear-gradient(120deg, rgba(164, 84, 255, 0.95), rgba(99, 66, 255, 0.9));
+      }
+      .amount { margin: 2px 0 8px; font-size: clamp(1.8rem, 3vw, 2.2rem); font-weight: 900; }
+      .amount small { font-size: 0.95rem; color: var(--muted); }
+      .price ul { margin: 14px 0 0; padding: 0; list-style: none; }
+      .price li { margin-bottom: 8px; color: #d8dfff; }
+
+      .contact-grid { margin-top: 30px; display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 14px; }
+      .contact-card, .form-card { padding: 24px; }
+      .form { display: grid; gap: 11px; }
+      .form label { font-size: 0.9rem; color: #d6deff; }
+      .form input, .form textarea, .form select {
+        width: 100%;
+        background: rgba(7, 10, 29, 0.76);
+        border: 1px solid rgba(134, 146, 255, 0.34);
+        border-radius: 11px;
+        color: #eff3ff;
+        font: inherit;
+        padding: 11px 12px;
+      }
+      .form textarea { resize: vertical; min-height: 110px; }
+
+      .faq-item summary {
+        cursor: pointer;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .faq-item[open] { border-color: var(--border-strong); }
+
+      .floating-call {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 80;
+      }
+
+      .marquee-wrap {
+        border-block: 1px solid rgba(120, 135, 210, 0.28);
+        background: rgba(8, 10, 28, 0.88);
+        overflow: hidden;
+        padding: 12px 0;
+      }
+      .marquee-inner { overflow: hidden; width: 100%; }
+      .marquee-track {
+        display: inline-flex;
+        gap: 4rem;
+        white-space: nowrap;
+        animation: marqueeScroll 32s linear infinite;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: #d2dcff;
+        padding-left: 0;
+      }
+      .marquee-track .marquee-content { flex-shrink: 0; }
+      @keyframes marqueeScroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-track { animation: none; justify-content: center; flex-wrap: wrap; white-space: normal; text-align: center; }
+      }
+
+      .trust-mini {
+        padding: 10px 0 14px;
+        border-bottom: 1px solid rgba(110, 124, 200, 0.18);
+        background: rgba(6, 8, 20, 0.5);
+      }
+      .trust-mini-inner {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px 22px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #aeb9e8;
+      }
+      .trust-mini-inner span {
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(130, 142, 220, 0.28);
+        background: rgba(106, 107, 255, 0.08);
+      }
+
+      .pricing-guarantee {
+        margin-top: 26px;
+        text-align: center;
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: #dff5ff;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(99, 255, 192, 0.35);
+        background: rgba(16, 42, 38, 0.45);
+      }
+
+      .testimonial-meta {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+      .testimonial-stars { letter-spacing: 0.08em; }
+      .testimonial-when { font-style: italic; }
+
+      .cta-finale {
+        padding: 96px 0;
+        text-align: center;
+        border-top: 1px solid rgba(120, 135, 220, 0.22);
+        background:
+          radial-gradient(ellipse 80% 60% at 50% 0%, rgba(106, 107, 255, 0.2), transparent 55%),
+          linear-gradient(180deg, rgba(10, 12, 30, 0.95), rgba(5, 6, 16, 0.98));
+      }
+      .cta-finale h2 {
+        margin: 0 auto 16px;
+        max-width: 720px;
+        font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      .cta-finale .lead {
+        margin: 0 auto 28px;
+        max-width: 520px;
+        font-size: 1.08rem;
+      }
+      .btn-cta-lg {
+        padding: 16px 32px;
+        font-size: 1.05rem;
+        border-radius: 14px;
+        box-shadow: 0 18px 44px rgba(111, 107, 255, 0.45);
+      }
+
+      .foot {
+        margin-top: 30px;
+        border-top: 1px solid rgba(137, 149, 255, 0.22);
+        background: rgba(6, 9, 24, 0.66);
+      }
+      .foot-wrap {
+        padding: 30px 0;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 18px;
+      }
+      .foot a { color: #c7d5ff; text-decoration: none; display: block; margin-bottom: 6px; }
+      .foot .brand {
+        color: white;
+        display: inline-flex;
+        margin-bottom: 10px;
+      }
+      .copyright {
+        padding: 10px 0 18px;
+        text-align: center;
+        color: #9ea7d8;
+        font-size: 0.9rem;
+      }
+
+      .mobile-dock { display: none; }
+      @media (max-width: 980px) {
+        .hero-grid, .contact-grid, .services-grid, .how-grid, .pricing-grid, .testimonials-grid, .faq-grid, .metrics, .foot-wrap, .showcase-grid {
+          grid-template-columns: 1fr;
+        }
+        .hero-chat-column { justify-content: center; }
+        .hero-chat-glow { max-width: 100%; }
+        .hero-stats-inline { flex-direction: column; align-items: stretch; }
+        .hero-stat-item { max-width: none; min-width: 0; }
+        .hero-chat-window { min-height: 360px; max-height: 58vh; }
+        .price-pop { transform: scale(1); }
+        .nav-links a:not(.nav-cta) { display: none; }
+        .mobile-dock {
+          position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 12px;
+          z-index: 60;
+          width: min(96%, 430px);
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+          padding: 8px;
+          border-radius: 16px;
+          background: rgba(9, 12, 34, 0.84);
+          border: 1px solid rgba(137, 149, 255, 0.36);
+          backdrop-filter: blur(12px);
+        }
+        .mobile-dock a {
+          text-decoration: none;
+          color: #d5ddff;
+          text-align: center;
+          padding: 10px 8px;
+          border-radius: 10px;
+          background: rgba(106, 107, 255, 0.14);
+          border: 1px solid rgba(135, 147, 255, 0.2);
+          font-size: 0.82rem;
+          font-weight: 700;
+        }
+        .floating-call { bottom: 80px; right: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-overlay"></div>
+    <div class="scroll-glow" id="scrollGlow" aria-hidden="true"></div>
+
+    <nav class="nav" id="navbar">
+      <div class="wrap nav-inner">
+        <a class="brand" href="#top" aria-label="Nexia — accueil">N<span>EXIA</span></a>
+        <div class="nav-links">
+          <a href="#services">Services</a>
+          <a href="#process">Comment ça marche</a>
+          <a href="#realisations">Réalisations</a>
+          <a href="#faq">FAQ</a>
+          <a class="btn btn-secondary nav-cta magnetic" href="#contact">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero" id="top">
+      <div class="hero-particles" aria-hidden="true">
+        <span style="left:8%;top:72%;animation-duration:8s;"></span>
+        <span style="left:18%;top:84%;animation-duration:9s;"></span>
+        <span style="left:24%;top:75%;animation-duration:7.5s;"></span>
+        <span style="left:38%;top:86%;animation-duration:8.2s;"></span>
+        <span style="left:54%;top:80%;animation-duration:9.2s;"></span>
+        <span style="left:66%;top:86%;animation-duration:7.8s;"></span>
+        <span style="left:78%;top:76%;animation-duration:8.5s;"></span>
+        <span style="left:89%;top:83%;animation-duration:8.8s;"></span>
+      </div>
+      <div class="wrap hero-grid">
+        <div class="hero-copy reveal">
+          <h1>Votre business, propulsé par l'IA</h1>
+          <p>
+            Un site web premium qui convertit. Une IA qui qualifie vos prospects 24 h/24 et génère des leads pour vous. Passez au digital intelligent — je m'occupe de tout.
+          </p>
+        </div>
+        <aside class="hero-chat-column reveal" id="heroChatRoot">
+          <div class="hero-chat-glow">
+            <div class="hero-chat-window">
+              <div class="hero-chat-top">
+                <div class="hero-chat-avatar" aria-hidden="true">IA</div>
+                <div>
+                  <div class="hero-chat-title">Assistant Nexia</div>
+                  <div class="hero-chat-sub">En ligne · réponses instantanées</div>
+                </div>
+              </div>
+              <div class="hero-chat-msgs" id="heroChatMessages" aria-live="polite">
+                <div class="hero-typing" id="heroTyping" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <div class="wrap hero-stats-bar">
+        <div class="hero-stats-inline">
+          <div class="hero-stat-item glass reveal">
+            <span class="hero-stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </span>
+            <span class="hero-stat-text">+3h/jour économisées</span>
+          </div>
+          <div class="hero-stat-item glass reveal">
+            <span class="hero-stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.33 1.86.57 2.82.7A2 2 0 0 1 22 16.92z"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+            </span>
+            <span class="hero-stat-text">-80% de demandes perdues</span>
+          </div>
+          <div class="hero-stat-item glass reveal">
+            <span class="hero-stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </span>
+            <span class="hero-stat-text">1 client = rentabilisé</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="marquee-wrap" aria-hidden="true">
+      <div class="marquee-inner">
+        <div class="marquee-track">
+          <span class="marquee-content">Médecins · Kinésithérapeutes · Avocats · Pharmaciens · Coaches · Agents immobiliers · Dentistes · Comptables · </span>
+          <span class="marquee-content">Médecins · Kinésithérapeutes · Avocats · Pharmaciens · Coaches · Agents immobiliers · Dentistes · Comptables · </span>
+        </div>
+      </div>
+    </div>
+    <div class="trust-mini">
+      <div class="wrap trust-mini-inner reveal">
+        <span>Propulsé par Claude AI</span>
+        <span>Powered by Voiceflow</span>
+        <span>Intégration Make</span>
+        <span>Brevo</span>
+      </div>
+    </div>
+
+    <main>
+      <section class="section" id="services">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Services</div>
+          <h2 class="title">3 outils pour attirer, convertir et fidéliser vos clients — sans effort de votre part</h2>
+          <p class="lead">3 services intégrés pour vous aider à convertir plus, plus vite.</p>
+          <div class="services-grid">
+            <article class="service glass reveal tilt" data-tilt>
+              <h3>Site vitrine premium</h3>
+              <p>Design haut de gamme, copywriting conversion et structure orientée ROI.</p>
+            </article>
+            <article class="service glass reveal tilt" data-tilt>
+              <h3>Chatbot IA</h3>
+              <p>Qualification des prospects 24/7 avec scénarios conversationnels personnalisés.</p>
+            </article>
+            <article class="service glass reveal tilt" data-tilt>
+              <h3>Automatisation des e-mails</h3>
+              <p>E-mails automatiques envoyés à chaque nouveau client</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="process">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Comment ça marche</div>
+          <h2 class="title">3 étapes simples pour activer votre machine de croissance IA</h2>
+          <p class="lead">Un processus clair, rapide et efficace pour transformer votre présence digitale.</p>
+          <div class="how-grid">
+            <article class="step glass reveal tilt" data-tilt>
+              <div class="step-num">1</div>
+              <h3>On analyse votre situation</h3>
+              <p>Analyse de votre cible, de vos objectifs et de vos points de friction business.</p>
+            </article>
+            <article class="step glass reveal tilt" data-tilt>
+              <div class="step-num">2</div>
+              <h3>Design & intégration IA</h3>
+              <p>Création d'une vitrine haut de gamme avec chatbot et scénarios intelligents.</p>
+            </article>
+            <article class="step glass reveal tilt" data-tilt>
+              <div class="step-num">3</div>
+              <h3>On met en ligne et on suit les résultats</h3>
+              <p>Mise en ligne, suivi des KPI et optimisations continues pour accélérer vos résultats.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="realisations">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Réalisations</div>
+          <h2 class="title">Cas client : Première Terre</h2>
+          <p class="lead">Agence immobilière en Occitanie avec site IA intégré et chatbot de qualification.</p>
+          <article class="project glass reveal tilt" data-tilt>
+            <h3 style="margin:0;">Première Terre</h3>
+            <p style="margin:6px 0 0;color:var(--muted);">premiereterre.fr</p>
+            <div class="showcase-grid">
+              <div class="browser-shot">
+                <span class="made-by-badge made-by-on-shot">Réalisé par Nexia</span>
+                <div class="browser-head"><i></i><i></i><i></i><span>https://premiereterre.fr</span></div>
+                <div class="scroll-viewport">
+                  <div class="scroll-track scroll-track-double">
+                    <img
+                      src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
+                      alt="Aperçu du site Première Terre"
+                      loading="lazy"
+                    />
+                    <img
+                      src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
+                      alt=""
+                      loading="lazy"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+                <div class="shot-overlay">Défilement auto</div>
+              </div>
+              <aside class="chatbot-vignette" aria-label="Aperçu du chatbot sur le site">
+                <div class="chatbot-mini">
+                  <h4>Chatbot IA sur le site</h4>
+                  <div class="mini-msg bot">Bonjour, je peux vous aider à trouver un bien en moins de 2 minutes.</div>
+                  <div class="mini-msg user">Je cherche un T3 en Occitanie autour de 250 000 €.</div>
+                  <div class="mini-msg bot">Parfait. Je vous propose 3 programmes adaptés et un rappel aujourd'hui.</div>
+                  <div class="chatbot-pill">Assistant en ligne 24/7</div>
+                </div>
+                <div class="chatbot-launcher" aria-hidden="true"></div>
+              </aside>
+            </div>
+            <div class="metrics">
+              <div class="metric"><strong>500+</strong><span>clients</span></div>
+              <div class="metric"><strong>4.9</strong><span>étoiles</span></div>
+              <div class="metric"><strong>180+</strong><span>programmes</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="temoignages">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Témoignages</div>
+          <h2 class="title">Ce que disent nos clients</h2>
+          <div class="testimonials-grid">
+            <article class="testimonial glass reveal tilt" data-tilt>
+              <h3>Dr. Laurent Blanc — Médecin généraliste Lyon</h3>
+              <p>« Nexia a clarifié notre offre et automatisé la prise de contact. Notre secrétariat gagne un temps précieux chaque jour. »</p>
+              <div class="testimonial-meta"><span class="testimonial-stars">⭐⭐⭐⭐⭐</span><span class="testimonial-when">il y a 2 semaines</span></div>
+            </article>
+            <article class="testimonial glass reveal tilt" data-tilt>
+              <h3>Marc Dupont — Agent immobilier Montpellier</h3>
+              <p>« Le chatbot IA qualifie les demandes avant même que mon équipe intervienne. Les prospects sont plus matures et mieux préparés. »</p>
+              <div class="testimonial-meta"><span class="testimonial-stars">⭐⭐⭐⭐⭐</span><span class="testimonial-when">il y a 2 semaines</span></div>
+            </article>
+            <article class="testimonial glass reveal tilt" data-tilt>
+              <h3>Julie Favre — Coach business Paris</h3>
+              <p>« Le site premium et les automatisations m'ont permis de structurer mon acquisition et d'augmenter mes rendez-vous qualifiés. »</p>
+              <div class="testimonial-meta"><span class="testimonial-stars">⭐⭐⭐⭐⭐</span><span class="testimonial-when">il y a 2 semaines</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="tarifs">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Tarifs</div>
+          <h2 class="title">Nos tarifs — simples et sans surprise</h2>
+          <p class="lead">Pas sûr de ce qu'il vous faut ? On vous guide lors de l'appel gratuit.</p>
+          <div class="pricing-banner">🔥 Le Game Changer — Le chatbot IA qui travaille pour vous 24h/24 pendant que vous dormez</div>
+          <div class="pricing-grid">
+            <article class="price glass reveal tilt" data-tilt>
+              <h3>Site vitrine</h3>
+              <div class="amount">400<small>€</small></div>
+              <ul>
+                <li>Design premium sur-mesure</li>
+                <li>Site rapide, responsive, optimisé pour la conversion</li>
+                <li>Livraison prête à déployer</li>
+              </ul>
+            </article>
+            <article class="price glass price-pop reveal tilt" data-tilt>
+              <h3>Pack complet</h3>
+              <div class="amount">600<small>€ + 100 €/mois</small></div>
+              <ul>
+                <li>Site vitrine + chatbot IA</li>
+                <li>E-mails automatiques envoyés à chaque nouveau client</li>
+                <li>On s'occupe de tout chaque mois, vous ne faites rien</li>
+              </ul>
+            </article>
+            <article class="price glass reveal tilt" data-tilt>
+              <h3>Chatbot seul</h3>
+              <div class="amount">300<small>€ + 100 €/mois</small></div>
+              <ul>
+                <li>Intégration sur site existant</li>
+                <li>Chatbot qui répond à vos clients à votre place</li>
+                <li>Améliorations continues</li>
+              </ul>
+            </article>
+          </div>
+          <p class="pricing-guarantee reveal">✅ Satisfait ou remboursé — si le rendu ne vous convient pas, on rembourse.</p>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>FAQ</div>
+          <h2 class="title">Questions fréquentes</h2>
+          <div class="faq-grid">
+            <details class="faq-item glass reveal" open><summary>Combien de temps pour livrer ?</summary><p>Entre 48h et 5 jours selon le projet. Site vitrine : 48h. Pack complet avec chatbot : 5 jours maximum.</p></details>
+            <details class="faq-item glass reveal" open><summary>Et si je n'ai pas de site ?</summary><p>Pas de problème — on crée tout de zéro. Site + chatbot + emails automatiques, clé en main.</p></details>
+            <details class="faq-item glass reveal"><summary>Vous travaillez dans quel secteur ?</summary><p>Nous adaptons l'approche IA à chaque activité : santé, immobilier, coaching, services B2B/B2C.</p></details>
+            <details class="faq-item glass reveal"><summary>Comment fonctionne la maintenance ?</summary><p>Chaque mois on met à jour votre chatbot, on corrige les bugs et on optimise les performances. Vous n'avez rien à faire.</p></details>
+            <details class="faq-item glass reveal"><summary>Puis-je tester avant de payer ?</summary><p>Oui — on vous propose un appel gratuit de 15 min et une maquette offerte pour que vous voyiez le résultat avant de vous engager.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="wrap">
+          <div class="tag"><span class="tag-dot"></span>Contact</div>
+          <h2 class="title">Prêt à passer à la vitesse supérieure avec l'IA ?</h2>
+          <p class="lead">Décrivez votre besoin et réservez un appel gratuit de 15 minutes.</p>
+          <div class="contact-grid">
+            <aside class="contact-card glass reveal tilt" data-tilt>
+              <h3 style="margin-top:0;">Nexia vous accompagne de A à Z</h3>
+              <p>De la stratégie au déploiement, nous construisons un système digital premium qui convertit mieux.</p>
+              <p style="margin:12px 0 0;color:var(--muted);font-size:0.92rem;">Téléphone : <a href="tel:+33613812859" style="color:#c8d4ff;">06 13 81 28 59</a></p>
+              <a class="btn btn-primary magnetic" href="https://calendly.com" target="_blank" rel="noopener noreferrer" aria-label="Réserver un appel gratuit 15 min">Réserver un appel gratuit 15 min</a>
+            </aside>
+            <div class="form-card glass reveal tilt" data-tilt>
+              <form class="form" action="#" method="post">
+                <div>
+                  <label for="name">Nom</label>
+                  <input id="name" name="name" type="text" placeholder="Votre nom" required />
+                </div>
+                <div>
+                  <label for="email">E-mail</label>
+                  <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
+                </div>
+                <div>
+                  <label for="phone">Téléphone</label>
+                  <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
+                </div>
+                <div>
+                  <label for="sector">Secteur d'activité</label>
+                  <select id="sector" name="sector" required>
+                    <option value="">Sélectionnez votre secteur</option>
+                    <option>Santé</option>
+                    <option>Immobilier</option>
+                    <option>Coaching / Formation</option>
+                    <option>E-commerce</option>
+                    <option>Services B2B</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
+                </div>
+                <button class="btn btn-secondary magnetic" type="submit">Envoyer la demande</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta-finale reveal" id="cta-appel">
+        <div class="wrap">
+          <h2 class="title">Vous perdez des clients chaque jour sans le savoir.</h2>
+          <p class="lead">On vous montre comment y remédier en 15 min — gratuitement.</p>
+          <a class="btn btn-primary magnetic btn-cta-lg" href="https://calendly.com" target="_blank" rel="noopener noreferrer">Réserver mon appel gratuit</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-wrap">
+        <div>
+          <a class="brand" href="#top" aria-label="Nexia — accueil">N<span>EXIA</span></a>
+          <p style="color:var(--muted);max-width:360px;">Agence IA premium pour accélérer votre acquisition avec design, automatisation et conversation intelligente.</p>
+        </div>
+        <div>
+          <strong>Navigation</strong>
+          <a href="#services">Services</a>
+          <a href="#process">Comment ça marche</a>
+          <a href="#tarifs">Tarifs</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div>
+          <strong>Contact</strong>
+          <a href="mailto:contact@nexia-agency.com">contact@nexia-agency.com</a>
+          <a href="tel:+33613812859">06 13 81 28 59</a>
+        </div>
+      </div>
+      <div class="copyright">© 2026 Nexia — Tous droits réservés</div>
+    </footer>
+
+    <a class="btn btn-primary floating-call magnetic" href="https://calendly.com" target="_blank" rel="noopener noreferrer">Réserver un appel</a>
+    <div class="mobile-dock">
+      <a href="#services">Services</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="https://calendly.com" target="_blank" rel="noopener noreferrer">Appel 15 min</a>
+    </div>
+
+    <script>
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+      document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
+      const glow = document.getElementById("scrollGlow");
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        const ratio = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
+        glow.style.left = 20 + ratio * 60 + "%";
+        glow.style.top = 18 + ratio * 64 + "%";
+        glow.style.opacity = String(0.5 + ratio * 0.5);
+        navbar.classList.toggle("scrolled", window.scrollY > 18);
+      }, { passive: true });
+
+      document.addEventListener("pointermove", (e) => {
+        const mx = e.clientX / window.innerWidth;
+        const my = e.clientY / window.innerHeight;
+        glow.style.transform = `translate(-50%, -50%) scale(${1 + my * 0.08})`;
+        glow.style.filter = `blur(${18 + mx * 18}px)`;
+      }, { passive: true });
+
+      document.querySelectorAll("[data-tilt]").forEach((card) => {
+        card.addEventListener("pointermove", (e) => {
+          if (window.matchMedia("(max-width: 980px)").matches) return;
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width;
+          const py = (e.clientY - r.top) / r.height;
+          card.style.transform = `perspective(900px) rotateX(${(0.5 - py) * 7}deg) rotateY(${(px - 0.5) * 8}deg)`;
+        });
+        card.addEventListener("pointerleave", () => {
+          card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg)";
+        });
+      });
+
+      document.querySelectorAll(".magnetic").forEach((btn) => {
+        btn.addEventListener("pointermove", (e) => {
+          if (window.matchMedia("(max-width: 980px)").matches) return;
+          const r = btn.getBoundingClientRect();
+          const x = (e.clientX - r.left - r.width / 2) * 0.12;
+          const y = (e.clientY - r.top - r.height / 2) * 0.2;
+          btn.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        btn.addEventListener("pointerleave", () => { btn.style.transform = "translate(0, 0)"; });
+      });
+
+      (function heroChatDemo() {
+        const root = document.getElementById("heroChatRoot");
+        const list = document.getElementById("heroChatMessages");
+        const typing = document.getElementById("heroTyping");
+        if (!root || !list || !typing) return;
+
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const script = [
+          { role: "patient", text: "Bonjour, je voudrais décaler ma consultation de demain matin." },
+          { role: "ia", text: "Bonjour, je suis l'assistant IA Nexia du cabinet. Je peux vérifier les créneaux disponibles tout de suite." },
+          { role: "patient", text: "Serait-ce possible jeudi après-midi ?" },
+          { role: "ia", text: "Oui : jeudi à 15h15 est libre. Souhaitez-vous que je confirme ce rendez-vous pour vous ?" },
+          { role: "patient", text: "Oui, parfait. Merci beaucoup." },
+          { role: "ia", text: "C'est enregistré. Vous recevrez une confirmation par SMS dans les prochaines minutes." }
+        ];
+
+        function wait(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        function appendBubble(role, textEl) {
+          const row = document.createElement("div");
+          row.className = role === "ia" ? "hero-msg-row hero-msg-row--ia" : "hero-msg-row hero-msg-row--patient";
+          const bubble = document.createElement("div");
+          bubble.className = role === "ia" ? "hero-msg hero-msg--ia" : "hero-msg hero-msg--patient";
+          bubble.appendChild(textEl);
+          if (role === "ia") {
+            const meta = document.createElement("div");
+            meta.className = "hero-msg-meta";
+            meta.textContent = "Assistant IA · Nexia";
+            bubble.appendChild(meta);
+          }
+          row.appendChild(bubble);
+          list.insertBefore(row, typing);
+          list.scrollTop = list.scrollHeight;
+        }
+
+        async function typeInto(el, full, ms) {
+          if (reduced || ms <= 0) {
+            el.textContent = full;
+            return;
+          }
+          const caret = "\u258d";
+          el.textContent = "";
+          for (let i = 0; i < full.length; i += 1) {
+            el.textContent = full.slice(0, i + 1) + caret;
+            list.scrollTop = list.scrollHeight;
+            await wait(full[i] === " " ? 10 : ms);
+          }
+          el.textContent = full;
+        }
+
+        async function playLine(line) {
+          if (line.role === "ia") {
+            typing.classList.add("is-visible");
+            typing.setAttribute("aria-hidden", "false");
+            await wait(reduced ? 0 : 520);
+            typing.classList.remove("is-visible");
+            typing.setAttribute("aria-hidden", "true");
+            const span = document.createElement("span");
+            appendBubble("ia", span);
+            await typeInto(span, line.text, reduced ? 0 : 19);
+          } else {
+            const span = document.createElement("span");
+            appendBubble("patient", span);
+            await typeInto(span, line.text, reduced ? 0 : 15);
+            await wait(reduced ? 120 : 420);
+          }
+          list.scrollTop = list.scrollHeight;
+          await wait(reduced ? 80 : 380);
+        }
+
+        async function loop() {
+          for (;;) {
+            list.querySelectorAll(".hero-msg-row").forEach((el) => el.remove());
+            for (let i = 0; i < script.length; i += 1) {
+              await playLine(script[i]);
+            }
+            await wait(reduced ? 1200 : 2800);
+          }
+        }
+
+        let started = false;
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !started) {
+                started = true;
+                loop();
+              }
+            });
+          },
+          { threshold: 0.15 }
+        );
+        io.observe(root);
+      })();
+    </script>
+  </body>
+</html>
