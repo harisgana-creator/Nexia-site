@@ -688,30 +688,6 @@
         padding: 11px 12px;
       }
       .form textarea { resize: vertical; min-height: 110px; }
-      .form-status {
-        margin-top: 6px;
-        font-size: 0.92rem;
-        font-weight: 600;
-        line-height: 1.45;
-        min-height: 1.45em;
-      }
-      .form-status--ok { color: #63ffc0; }
-      .form-status--err { color: #ff9b9b; }
-      .form-success-msg {
-        margin: 0;
-        font-size: 1.15rem;
-        font-weight: 700;
-        line-height: 1.5;
-        color: #e8fff4;
-        text-align: center;
-        padding: 28px 12px;
-      }
-      .form .btn:disabled {
-        opacity: 0.55;
-        cursor: not-allowed;
-        pointer-events: none;
-      }
-
       .faq-item summary {
         cursor: pointer;
         font-weight: 700;
@@ -1179,40 +1155,37 @@
               <a class="btn btn-primary magnetic" href="https://calendly.com" target="_blank" rel="noopener noreferrer" aria-label="Réserver un appel gratuit 15 min">Réserver un appel gratuit 15 min</a>
             </aside>
             <div class="form-card glass reveal tilt" data-tilt>
-              <div id="contact-form-root">
-                <form class="form" id="contact-form" action="/api/send" method="post" novalidate>
-                  <div>
-                    <label for="name">Nom</label>
-                    <input id="name" name="name" type="text" placeholder="Votre nom" required />
-                  </div>
-                  <div>
-                    <label for="email">E-mail</label>
-                    <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
-                  </div>
-                  <div>
-                    <label for="phone">Téléphone</label>
-                    <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
-                  </div>
-                  <div>
-                    <label for="sector">Secteur d'activité</label>
-                    <select id="sector" name="sector" required>
-                      <option value="">Sélectionnez votre secteur</option>
-                      <option>Santé</option>
-                      <option>Immobilier</option>
-                      <option>Coaching / Formation</option>
-                      <option>E-commerce</option>
-                      <option>Services B2B</option>
-                      <option>Autre</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
-                  </div>
-                  <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
-                  <button class="btn btn-secondary magnetic" type="submit" id="contact-submit">Envoyer la demande</button>
-                </form>
-              </div>
+              <form class="form" id="contact-form" action="#" method="get" novalidate>
+                <div>
+                  <label for="name">Nom</label>
+                  <input id="name" name="name" type="text" placeholder="Votre nom" required />
+                </div>
+                <div>
+                  <label for="email">E-mail</label>
+                  <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
+                </div>
+                <div>
+                  <label for="phone">Téléphone</label>
+                  <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
+                </div>
+                <div>
+                  <label for="sector">Secteur d'activité</label>
+                  <select id="sector" name="sector" required>
+                    <option value="">Sélectionnez votre secteur</option>
+                    <option>Santé</option>
+                    <option>Immobilier</option>
+                    <option>Coaching / Formation</option>
+                    <option>E-commerce</option>
+                    <option>Services B2B</option>
+                    <option>Autre</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
+                </div>
+                <button class="btn btn-secondary magnetic" type="submit">Envoyer la demande</button>
+              </form>
             </div>
           </div>
         </div>
@@ -1308,61 +1281,32 @@
         btn.addEventListener("pointerleave", () => { btn.style.transform = "translate(0, 0)"; });
       });
 
-      (function contactFormResend() {
-        const root = document.getElementById("contact-form-root");
+      (function contactFormMailto() {
         const form = document.getElementById("contact-form");
-        const statusEl = document.getElementById("form-status");
-        const submitBtn = document.getElementById("contact-submit");
-        if (!root || !form || !statusEl || !submitBtn) return;
-
-        form.addEventListener("submit", async (e) => {
+        if (!form) return;
+        form.addEventListener("submit", (e) => {
           e.preventDefault();
-          statusEl.textContent = "";
-          statusEl.classList.remove("form-status--ok", "form-status--err");
-
           if (!form.checkValidity()) {
             form.reportValidity();
             return;
           }
-
-          const payload = {
-            name: form.elements.name.value.trim(),
-            email: form.elements.email.value.trim(),
-            phone: form.elements.phone.value.trim(),
-            sector: form.elements.sector.value.trim(),
-            message: form.elements.message.value.trim(),
-          };
-
-          submitBtn.disabled = true;
-          try {
-            const res = await fetch("/api/send", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
-            });
-            let data = {};
-            try {
-              data = await res.json();
-            } catch {
-              data = {};
-            }
-            if (!res.ok) {
-              const msg =
-                (data && data.error) ||
-                "Envoi impossible pour le moment. Réessayez ou écrivez-nous directement.";
-              statusEl.textContent = msg;
-              statusEl.classList.add("form-status--err");
-              return;
-            }
-            root.innerHTML =
-              '<p class="form-success-msg" role="status" aria-live="polite">Merci ! On vous répond sous 24h 🚀</p>';
-          } catch {
-            statusEl.textContent =
-              "Connexion impossible. Vérifiez votre réseau ou réessayez plus tard.";
-            statusEl.classList.add("form-status--err");
-          } finally {
-            if (submitBtn.isConnected) submitBtn.disabled = false;
-          }
+          const name = form.elements.name.value.trim();
+          const email = form.elements.email.value.trim();
+          const phone = form.elements.phone.value.trim();
+          const sector = form.elements.sector.value.trim();
+          const message = form.elements.message.value.trim();
+          const subject = "Nouveau contact Nexia — " + name;
+          const body =
+            "Nom : " + name + "\n" +
+            "E-mail : " + email + "\n" +
+            "Téléphone : " + (phone || "—") + "\n" +
+            "Secteur : " + sector + "\n\n" +
+            "Message :\n" + message;
+          const href =
+            "mailto:haris.gana@gmail.com" +
+            "?subject=" + encodeURIComponent(subject) +
+            "&body=" + encodeURIComponent(body);
+          window.location.href = href;
         });
       })();
 
