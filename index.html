@@ -31,6 +31,17 @@
       }
 
       * { box-sizing: border-box; }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
       html { scroll-behavior: smooth; }
       body {
         margin: 0;
@@ -471,29 +482,46 @@
       .scroll-viewport {
         height: 290px;
         overflow: hidden;
+        position: relative;
+        isolation: isolate;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
       }
       .scroll-track {
-        will-change: transform;
-      }
-      .scroll-track-double {
-        animation: siteScrollLoop 18s linear infinite;
-      }
-      .browser-shot img {
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        display: block;
-        /* Rogne le bas de la capture (bannière cookies / bandeau fixe) */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-animation: siteScrollLoop 22s linear infinite;
+        animation: siteScrollLoop 22s linear infinite;
+      }
+      .scroll-frame-img {
+        flex: 0 0 auto;
+        width: 100%;
+        overflow: hidden;
+        -webkit-clip-path: inset(0 0 11% 0);
         clip-path: inset(0 0 11% 0);
       }
-      .shot-overlay {
+      .scroll-frame-img img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .browser-shot::after {
+        content: "Défilement auto";
         position: absolute;
-        inset: auto 12px 12px auto;
+        z-index: 8;
+        right: max(12px, env(safe-area-inset-right, 0px));
+        bottom: max(12px, env(safe-area-inset-bottom, 0px));
         font-size: 0.72rem;
         font-weight: 700;
         border-radius: 999px;
         padding: 5px 9px;
         color: #e9f8ff;
-        background: rgba(8, 11, 30, 0.72);
+        background: rgba(8, 11, 30, 0.82);
         border: 1px solid rgba(153, 164, 255, 0.43);
+        pointer-events: none;
       }
       .chatbot-vignette {
         border-radius: 16px;
@@ -562,12 +590,16 @@
         font-size: 0.74rem;
         color: #cfddff;
       }
+      @-webkit-keyframes siteScrollLoop {
+        from { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+        to { -webkit-transform: translate3d(0, -50%, 0); transform: translate3d(0, -50%, 0); }
+      }
       @keyframes siteScrollLoop {
-        from { transform: translateY(0); }
-        to { transform: translateY(-50%); }
+        from { -webkit-transform: translate3d(0, 0, 0); transform: translate3d(0, 0, 0); }
+        to { -webkit-transform: translate3d(0, -50%, 0); transform: translate3d(0, -50%, 0); }
       }
       @media (prefers-reduced-motion: reduce) {
-        .scroll-track-double { animation: none; }
+        .scroll-track { -webkit-animation: none; animation: none; }
         .made-by-on-shot { animation: none; }
         .hero-chat-glow { animation: none; }
         .hero-typing span { animation: none; }
@@ -656,6 +688,29 @@
         padding: 11px 12px;
       }
       .form textarea { resize: vertical; min-height: 110px; }
+      .form-status {
+        margin-top: 6px;
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.45;
+        min-height: 1.45em;
+      }
+      .form-status--ok { color: #63ffc0; }
+      .form-status--err { color: #ff9b9b; }
+      .form-success-msg {
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.5;
+        color: #e8fff4;
+        text-align: center;
+        padding: 28px 12px;
+      }
+      .form .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
 
       .faq-item summary {
         cursor: pointer;
@@ -993,21 +1048,26 @@
                 <span class="made-by-badge made-by-on-shot">Réalisé par Nexia</span>
                 <div class="browser-head"><i></i><i></i><i></i><span>https://premiereterre.fr</span></div>
                 <div class="scroll-viewport">
-                  <div class="scroll-track scroll-track-double">
-                    <img
-                      src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
-                      alt="Aperçu du site Première Terre"
-                      loading="lazy"
-                    />
-                    <img
-                      src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
-                      alt=""
-                      loading="lazy"
-                      aria-hidden="true"
-                    />
+                  <div class="scroll-track" aria-hidden="true">
+                    <div class="scroll-frame-img">
+                      <img
+                        src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
+                        alt=""
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </div>
+                    <div class="scroll-frame-img">
+                      <img
+                        src="https://image.thum.io/get/width/1400/https://premiereterre.fr"
+                        alt=""
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div class="shot-overlay">Défilement auto</div>
+                <span class="visually-hidden">Aperçu du site Première Terre, défilement automatique de haut en bas en boucle.</span>
               </div>
               <aside class="chatbot-vignette" aria-label="Aperçu du chatbot sur le site">
                 <div class="chatbot-mini">
@@ -1119,37 +1179,40 @@
               <a class="btn btn-primary magnetic" href="https://calendly.com" target="_blank" rel="noopener noreferrer" aria-label="Réserver un appel gratuit 15 min">Réserver un appel gratuit 15 min</a>
             </aside>
             <div class="form-card glass reveal tilt" data-tilt>
-              <form class="form" action="#" method="post">
-                <div>
-                  <label for="name">Nom</label>
-                  <input id="name" name="name" type="text" placeholder="Votre nom" required />
-                </div>
-                <div>
-                  <label for="email">E-mail</label>
-                  <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
-                </div>
-                <div>
-                  <label for="phone">Téléphone</label>
-                  <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
-                </div>
-                <div>
-                  <label for="sector">Secteur d'activité</label>
-                  <select id="sector" name="sector" required>
-                    <option value="">Sélectionnez votre secteur</option>
-                    <option>Santé</option>
-                    <option>Immobilier</option>
-                    <option>Coaching / Formation</option>
-                    <option>E-commerce</option>
-                    <option>Services B2B</option>
-                    <option>Autre</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="message">Message</label>
-                  <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
-                </div>
-                <button class="btn btn-secondary magnetic" type="submit">Envoyer la demande</button>
-              </form>
+              <div id="contact-form-root">
+                <form class="form" id="contact-form" action="/api/send" method="post" novalidate>
+                  <div>
+                    <label for="name">Nom</label>
+                    <input id="name" name="name" type="text" placeholder="Votre nom" required />
+                  </div>
+                  <div>
+                    <label for="email">E-mail</label>
+                    <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
+                  </div>
+                  <div>
+                    <label for="phone">Téléphone</label>
+                    <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
+                  </div>
+                  <div>
+                    <label for="sector">Secteur d'activité</label>
+                    <select id="sector" name="sector" required>
+                      <option value="">Sélectionnez votre secteur</option>
+                      <option>Santé</option>
+                      <option>Immobilier</option>
+                      <option>Coaching / Formation</option>
+                      <option>E-commerce</option>
+                      <option>Services B2B</option>
+                      <option>Autre</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
+                  </div>
+                  <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+                  <button class="btn btn-secondary magnetic" type="submit" id="contact-submit">Envoyer la demande</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -1244,6 +1307,64 @@
         });
         btn.addEventListener("pointerleave", () => { btn.style.transform = "translate(0, 0)"; });
       });
+
+      (function contactFormResend() {
+        const root = document.getElementById("contact-form-root");
+        const form = document.getElementById("contact-form");
+        const statusEl = document.getElementById("form-status");
+        const submitBtn = document.getElementById("contact-submit");
+        if (!root || !form || !statusEl || !submitBtn) return;
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          statusEl.textContent = "";
+          statusEl.classList.remove("form-status--ok", "form-status--err");
+
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          const payload = {
+            name: form.elements.name.value.trim(),
+            email: form.elements.email.value.trim(),
+            phone: form.elements.phone.value.trim(),
+            sector: form.elements.sector.value.trim(),
+            message: form.elements.message.value.trim(),
+          };
+
+          submitBtn.disabled = true;
+          try {
+            const res = await fetch("/api/send", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            let data = {};
+            try {
+              data = await res.json();
+            } catch {
+              data = {};
+            }
+            if (!res.ok) {
+              const msg =
+                (data && data.error) ||
+                "Envoi impossible pour le moment. Réessayez ou écrivez-nous directement.";
+              statusEl.textContent = msg;
+              statusEl.classList.add("form-status--err");
+              return;
+            }
+            root.innerHTML =
+              '<p class="form-success-msg" role="status" aria-live="polite">Merci ! On vous répond sous 24h 🚀</p>';
+          } catch {
+            statusEl.textContent =
+              "Connexion impossible. Vérifiez votre réseau ou réessayez plus tard.";
+            statusEl.classList.add("form-status--err");
+          } finally {
+            if (submitBtn.isConnected) submitBtn.disabled = false;
+          }
+        });
+      })();
 
       (function heroChatDemo() {
         const root = document.getElementById("heroChatRoot");
