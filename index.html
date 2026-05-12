@@ -688,6 +688,23 @@
         padding: 11px 12px;
       }
       .form textarea { resize: vertical; min-height: 110px; }
+      .mailto-test-btn {
+        margin-top: 8px;
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px dashed rgba(153, 164, 255, 0.45);
+        background: transparent;
+        color: #b8c4ff;
+        font: inherit;
+        font-size: 0.82rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .mailto-test-btn:hover {
+        border-color: rgba(186, 198, 255, 0.65);
+        color: #e4e9ff;
+      }
       .faq-item summary {
         cursor: pointer;
         font-weight: 700;
@@ -1157,20 +1174,20 @@
             <div class="form-card glass reveal tilt" data-tilt>
               <form class="form" id="contact-form" action="#" method="get" novalidate>
                 <div>
-                  <label for="name">Nom</label>
-                  <input id="name" name="name" type="text" placeholder="Votre nom" required />
+                  <label for="contact-name">Nom</label>
+                  <input id="contact-name" name="contact_name" type="text" placeholder="Votre nom" required />
                 </div>
                 <div>
-                  <label for="email">E-mail</label>
-                  <input id="email" name="email" type="email" placeholder="vous@entreprise.com" required />
+                  <label for="contact-email">E-mail</label>
+                  <input id="contact-email" name="contact_email" type="email" placeholder="vous@entreprise.com" required />
                 </div>
                 <div>
-                  <label for="phone">Téléphone</label>
-                  <input id="phone" name="phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
+                  <label for="contact-phone">Téléphone</label>
+                  <input id="contact-phone" name="contact_phone" type="tel" placeholder="06 13 81 28 59" autocomplete="tel" />
                 </div>
                 <div>
-                  <label for="sector">Secteur d'activité</label>
-                  <select id="sector" name="sector" required>
+                  <label for="contact-sector">Secteur d'activité</label>
+                  <select id="contact-sector" name="contact_sector" required>
                     <option value="">Sélectionnez votre secteur</option>
                     <option>Santé</option>
                     <option>Immobilier</option>
@@ -1181,10 +1198,11 @@
                   </select>
                 </div>
                 <div>
-                  <label for="message">Message</label>
-                  <textarea id="message" name="message" placeholder="Votre projet IA..." required></textarea>
+                  <label for="contact-message">Message</label>
+                  <textarea id="contact-message" name="contact_message" placeholder="Votre projet IA..." required></textarea>
                 </div>
-                <button class="btn btn-secondary magnetic" type="submit">Envoyer la demande</button>
+                <button class="btn btn-secondary magnetic" type="submit" id="contact-submit">Envoyer la demande</button>
+                <button type="button" class="mailto-test-btn" id="mailto-smoke-test">Test mailto (simple)</button>
               </form>
             </div>
           </div>
@@ -1283,31 +1301,60 @@
 
       (function contactFormMailto() {
         const form = document.getElementById("contact-form");
-        if (!form) return;
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-          }
-          const name = form.elements.name.value.trim();
-          const email = form.elements.email.value.trim();
-          const phone = form.elements.phone.value.trim();
-          const sector = form.elements.sector.value.trim();
-          const message = form.elements.message.value.trim();
-          const subject = "Nouveau contact Nexia — " + name;
-          const body =
-            "Nom : " + name + "\n" +
-            "E-mail : " + email + "\n" +
-            "Téléphone : " + (phone || "—") + "\n" +
-            "Secteur : " + sector + "\n\n" +
-            "Message :\n" + message;
-          const href =
-            "mailto:haris.gana@gmail.com" +
-            "?subject=" + encodeURIComponent(subject) +
-            "&body=" + encodeURIComponent(body);
-          window.location.href = href;
-        });
+        const smokeTest = document.getElementById("mailto-smoke-test");
+        console.log("[Nexia contact] init mailto", { form: !!form, smokeTest: !!smokeTest });
+
+        if (!form) {
+          console.warn("[Nexia contact] #contact-form introuvable");
+          return;
+        }
+
+        form.addEventListener(
+          "submit",
+          (e) => {
+            console.log("[Nexia contact] submit capturé");
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!form.checkValidity()) {
+              console.log("[Nexia contact] validation HTML5 échouée");
+              form.reportValidity();
+              return;
+            }
+
+            const name = document.getElementById("contact-name")?.value?.trim() ?? "";
+            const email = document.getElementById("contact-email")?.value?.trim() ?? "";
+            const phone = document.getElementById("contact-phone")?.value?.trim() ?? "";
+            const sector = document.getElementById("contact-sector")?.value?.trim() ?? "";
+            const message = document.getElementById("contact-message")?.value?.trim() ?? "";
+
+            console.log("[Nexia contact] champs", { name, email, phone, sector, messageLen: message.length });
+
+            const subject = "Nouveau contact Nexia — " + name;
+            const body =
+              "Nom : " + name + "\n" +
+              "E-mail : " + email + "\n" +
+              "Téléphone : " + (phone || "—") + "\n" +
+              "Secteur : " + sector + "\n\n" +
+              "Message :\n" + message;
+
+            const href =
+              "mailto:haris.gana@gmail.com" +
+              "?subject=" + encodeURIComponent(subject) +
+              "&body=" + encodeURIComponent(body);
+
+            console.log("[Nexia contact] mailto longueur URL", href.length, href.slice(0, 120) + "…");
+            window.location.href = href;
+          },
+          false
+        );
+
+        if (smokeTest) {
+          smokeTest.addEventListener("click", () => {
+            console.log("[Nexia contact] test mailto simple (clic)");
+            window.location.href = "mailto:haris.gana@gmail.com";
+          });
+        }
       })();
 
       (function heroChatDemo() {
