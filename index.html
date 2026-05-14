@@ -54,6 +54,7 @@
           linear-gradient(180deg, var(--bg) 0%, #07091a 40%, #04050d 100%);
         line-height: 1.58;
         overflow-x: hidden;
+        padding-bottom: max(112px, calc(100px + env(safe-area-inset-bottom, 0px)));
       }
 
       .grid-overlay {
@@ -213,32 +214,362 @@
       .hero {
         position: relative;
         padding: 88px 0 36px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
       .hero-grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: clamp(28px, 5vw, 56px);
         align-items: center;
+        width: 100%;
       }
-      .hero-copy {
-        padding: 8px 0 24px;
+      .hero-left {
+        padding: 8px 0 0;
+        padding-left: max(40px, env(safe-area-inset-left, 0px));
         position: relative;
-        max-width: 560px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        text-align: left;
       }
-      .hero-copy h1 {
-        margin: 0 0 20px;
+      .hero-title-stack {
+        position: relative;
+        margin-bottom: 20px;
+      }
+      .hero-title-viz {
+        position: absolute;
+        left: -10%;
+        right: -14%;
+        top: -42%;
+        bottom: -38%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .hero-title-gridlines {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(130, 150, 255, 0.11) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(130, 150, 255, 0.09) 1px, transparent 1px);
+        background-size: 20px 20px;
+        -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 48%, #000 12%, transparent 70%);
+        mask-image: radial-gradient(ellipse 72% 72% at 50% 48%, #000 12%, transparent 70%);
+        animation: heroTitleGridDrift 20s linear infinite;
+        opacity: 0.9;
+      }
+      .hero-title-nodes {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 18% 32%, rgba(69, 214, 255, 0.38) 0, transparent 42%),
+          radial-gradient(circle at 82% 58%, rgba(186, 87, 255, 0.34) 0, transparent 40%),
+          radial-gradient(circle at 52% 14%, rgba(106, 107, 255, 0.28) 0, transparent 36%);
+        -webkit-mask-image: radial-gradient(ellipse 68% 64% at 50% 46%, #000, transparent 74%);
+        mask-image: radial-gradient(ellipse 68% 64% at 50% 46%, #000, transparent 74%);
+        animation: heroTitleNodesPulse 5.5s ease-in-out infinite alternate;
+      }
+      .hero-title-pulse {
+        position: absolute;
+        inset: -25%;
+        background: conic-gradient(
+          from 200deg at 50% 50%,
+          transparent 0deg,
+          rgba(106, 107, 255, 0.2) 80deg,
+          transparent 160deg,
+          rgba(69, 214, 255, 0.14) 240deg,
+          transparent 320deg
+        );
+        animation: heroTitleCone 16s linear infinite;
+        opacity: 0.55;
+        filter: blur(32px);
+      }
+      @keyframes heroTitleGridDrift {
+        from { transform: translate(0, 0); }
+        to { transform: translate(20px, 20px); }
+      }
+      @keyframes heroTitleNodesPulse {
+        from { opacity: 0.7; transform: scale(1); }
+        to { opacity: 1; transform: scale(1.06); }
+      }
+      @keyframes heroTitleCone {
+        to { transform: rotate(360deg); }
+      }
+      .hero-left h1 {
+        text-align: left;
+      }
+      .hero-title-stack h1 {
+        position: relative;
+        z-index: 1;
+        margin: 0;
         font-size: clamp(2.35rem, 5.2vw, 3.65rem);
         line-height: 1.04;
         letter-spacing: -0.035em;
         font-weight: 800;
       }
-      .hero-copy p {
-        margin: 0;
+      .hero-left p {
+        text-align: left;
+        position: relative;
+        z-index: 1;
+        margin: 0 0 clamp(18px, 3vw, 26px);
         color: #a8b4e8;
         font-size: clamp(1.05rem, 1.35vw, 1.2rem);
         line-height: 1.62;
-        max-width: 520px;
+        max-width: 100%;
       }
+      .hero-macbook-wrap {
+        margin-top: 0;
+        width: 100%;
+        max-width: min(480px, 100%);
+        position: relative;
+        perspective: 1200px;
+        perspective-origin: 52% 35%;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .hero-macbook-glow {
+        position: absolute;
+        left: -12%;
+        right: -18%;
+        top: 5%;
+        bottom: -8%;
+        background: radial-gradient(
+          ellipse 72% 58% at 48% 42%,
+          rgba(186, 87, 255, 0.38) 0%,
+          rgba(106, 107, 255, 0.16) 42%,
+          transparent 68%
+        );
+        filter: blur(20px);
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.9;
+      }
+      .hero-macbook {
+        position: relative;
+        z-index: 1;
+        transform-style: preserve-3d;
+        transform: rotateX(10deg) rotateY(-14deg) rotateZ(-0.5deg);
+        transition: transform 0.55s cubic-bezier(0.2, 0.85, 0.2, 1);
+      }
+      .hero-macbook-wrap:hover .hero-macbook {
+        transform: rotateX(8deg) rotateY(-11deg) rotateZ(-0.5deg) translateY(-3px);
+      }
+      .hero-macbook-lid {
+        border-radius: 18px 18px 7px 7px;
+        padding: 14px 14px 11px;
+        background: linear-gradient(165deg, #3d425e 0%, #252a3f 38%, #161a2a 100%);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.08) inset,
+          0 -1px 0 rgba(0, 0, 0, 0.35) inset,
+          0 28px 48px rgba(4, 6, 18, 0.55),
+          0 0 0 1px rgba(90, 100, 160, 0.35);
+      }
+      .hero-macbook-camera {
+        width: 9px;
+        height: 9px;
+        margin: 0 auto 9px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 30%, #5a5f78, #1e2130);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+      }
+      .hero-macbook-bezel {
+        border-radius: 11px;
+        overflow: hidden;
+        background: #03040c;
+        border: 1px solid rgba(88, 98, 150, 0.55);
+        box-shadow: inset 0 0 0 1px rgba(20, 24, 48, 0.9);
+      }
+      .hero-macbook-screen {
+        aspect-ratio: 16 / 10;
+        background: linear-gradient(165deg, #0a0d1a 0%, #050611 100%);
+        overflow: hidden;
+      }
+      .hero-dash {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        font-size: clamp(0.81rem, 1.52vw, 0.99rem);
+        color: #9aa8d8;
+      }
+      .hero-dash-chrome {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 9px 11px;
+        background: linear-gradient(180deg, #12162a, #0c0f1c);
+        border-bottom: 1px solid rgba(80, 92, 150, 0.35);
+      }
+      .hero-dash-traffic {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+      .hero-dash-traffic i {
+        display: block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        font-style: normal;
+        box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+      }
+      .hero-dash-traffic i:nth-child(1) { background: #ff5f57; }
+      .hero-dash-traffic i:nth-child(2) { background: #febc2e; }
+      .hero-dash-traffic i:nth-child(3) { background: #28c840; }
+      .hero-dash-bar {
+        flex: 1;
+        text-align: center;
+        padding: 6px 11px;
+        border-radius: 7px;
+        font-size: clamp(0.765rem, 1.41vw, 0.9rem);
+        font-weight: 600;
+        color: #7d8ab8;
+        background: rgba(8, 10, 26, 0.85);
+        border: 1px solid rgba(90, 102, 160, 0.25);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .hero-dash-main {
+        flex: 1;
+        display: block;
+        padding: 10px 11px 11px;
+        min-height: 0;
+      }
+      .hero-dash-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+      }
+      .hero-dash-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+      }
+      .hero-dash-card {
+        border-radius: 9px;
+        padding: 9px 7px 10px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(10, 12, 28, 0.92);
+      }
+      .hero-dash-card strong {
+        display: block;
+        font-size: clamp(1.07rem, 2.7vw, 1.29rem);
+        font-weight: 800;
+        color: #eef2ff;
+        letter-spacing: -0.03em;
+        line-height: 1.12;
+      }
+      .hero-dash-card small {
+        display: block;
+        margin-top: 5px;
+        font-size: clamp(0.7rem, 1.29vw, 0.83rem);
+        color: #8b9bc4;
+        text-transform: none;
+        letter-spacing: 0.02em;
+        line-height: 1.3;
+      }
+      .hero-dash-card--cyan {
+        background: linear-gradient(145deg, rgba(69, 214, 255, 0.22), rgba(15, 22, 44, 0.95));
+        border-color: rgba(69, 214, 255, 0.28);
+      }
+      .hero-dash-card--cyan strong { color: #b8f0ff; }
+      .hero-dash-card--violet {
+        background: linear-gradient(145deg, rgba(186, 87, 255, 0.28), rgba(18, 12, 40, 0.95));
+        border-color: rgba(186, 87, 255, 0.32);
+      }
+      .hero-dash-card--violet strong { color: #ecd9ff; }
+      .hero-dash-card--indigo {
+        background: linear-gradient(145deg, rgba(106, 107, 255, 0.26), rgba(12, 14, 36, 0.95));
+        border-color: rgba(130, 140, 255, 0.3);
+      }
+      .hero-dash-card--indigo strong { color: #d8ddff; }
+      .hero-dash-chart--curve {
+        flex: 1;
+        min-height: 81px;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 9px 9px 8px;
+        border-radius: 9px;
+        background: rgba(8, 10, 24, 0.75);
+        border: 1px solid rgba(70, 85, 150, 0.22);
+      }
+      .hero-dash-chart-label {
+        font-size: clamp(0.765rem, 1.35vw, 0.88rem);
+        font-weight: 700;
+        color: #b4c2ec;
+        letter-spacing: 0.04em;
+      }
+      .hero-dash-curve-svg {
+        width: 100%;
+        height: clamp(50px, 11.25vw, 63px);
+        display: block;
+        overflow: visible;
+      }
+      .hero-dash-curve-line {
+        fill: none;
+        stroke: url(#heroDashCurveStroke);
+        stroke-width: 3.15;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: drop-shadow(0 0 6px rgba(106, 107, 255, 0.5));
+      }
+      .hero-dash-curve-area {
+        opacity: 0.22;
+      }
+      .hero-dash-badges {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .hero-dash-badge {
+        display: block;
+        padding: 6px 9px;
+        border-radius: 8px;
+        font-size: clamp(0.7rem, 1.24vw, 0.83rem);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.35;
+      }
+      .hero-dash-badge--live {
+        color: #c8ffe8;
+        background: rgba(37, 211, 102, 0.12);
+        border: 1px solid rgba(37, 211, 102, 0.28);
+      }
+      .hero-dash-badge--ok {
+        color: #d8e4ff;
+        background: rgba(106, 107, 255, 0.14);
+        border: 1px solid rgba(140, 155, 230, 0.3);
+      }
+      .hero-macbook-base {
+        height: 15px;
+        margin: 0 14px;
+        border-radius: 3px 3px 20px 20px;
+        background: linear-gradient(180deg, #4a5068 0%, #2a2f44 35%, #151823 100%);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.06) inset,
+          0 14px 28px rgba(0, 0, 0, 0.42);
+        transform: translateZ(-2px);
+      }
+      .hero-macbook-notch {
+        width: 28%;
+        height: 5px;
+        margin: 3px auto 0;
+        border-radius: 0 0 9px 9px;
+        background: linear-gradient(180deg, #0c0e18, #1a1e2e);
+        opacity: 0.85;
+      }
+
       .hero-stats-bar {
         margin-top: 48px;
         padding-top: 28px;
@@ -286,12 +617,103 @@
       .hero-chat-column {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        min-height: 0;
+        justify-content: center;
+        width: 100%;
+        max-width: min(550px, 100%);
+        justify-self: center;
+      }
+      .hero-chat-stack {
+        position: relative;
+        width: 100%;
+        max-width: min(550px, 100%);
+      }
+      .hero-chat-neural {
+        position: absolute;
+        inset: -36px -44px -56px -44px;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.92;
+      }
+      .hero-neural-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        overflow: visible;
+      }
+      .hero-neural-svg .hero-neural-edge {
+        fill: none;
+        stroke: url(#heroNeuralLineGrad);
+        stroke-width: 1.35;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        filter: url(#heroNeuralGlow);
+        opacity: 0.42;
+        stroke-dasharray: 5 12;
+        stroke-dashoffset: 0;
+        animation:
+          heroNeuralDash 5.5s linear infinite,
+          heroNeuralEdgePulse 3.4s ease-in-out infinite;
+      }
+      .hero-neural-svg .hero-neural-edge:nth-child(1) { animation-delay: 0s, 0s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(2) { animation-delay: -0.35s, -0.2s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(3) { animation-delay: -0.7s, -0.4s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(4) { animation-delay: -1s, -0.6s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(5) { animation-delay: -1.3s, -0.8s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(6) { animation-delay: -1.65s, -1s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(7) { animation-delay: -2s, -1.2s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(8) { animation-delay: -2.35s, -1.4s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(9) { animation-delay: -2.7s, -1.6s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(10) { animation-delay: -3s, -1.8s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(11) { animation-delay: -3.35s, -2s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(12) { animation-delay: -3.7s, -2.2s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(13) { animation-delay: -4s, -2.4s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(14) { animation-delay: -4.35s, -2.6s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(15) { animation-delay: -4.7s, -2.8s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(16) { animation-delay: -5s, -3s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(17) { animation-delay: -0.5s, -0.3s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(18) { animation-delay: -1.8s, -1.1s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(19) { animation-delay: -3.2s, -1.9s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(20) { animation-delay: -4.4s, -2.7s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(21) { animation-delay: -2.9s, -1.55s; }
+      .hero-neural-svg .hero-neural-edge:nth-child(22) { animation-delay: -4.1s, -2.35s; }
+      @keyframes heroNeuralDash {
+        to { stroke-dashoffset: -68; }
+      }
+      @keyframes heroNeuralEdgePulse {
+        0%, 100% { opacity: 0.32; stroke-width: 1.1; }
+        50% { opacity: 0.72; stroke-width: 1.65; }
+      }
+      .hero-neural-svg .hero-neural-node {
+        fill: url(#heroNeuralNodeGrad);
+        filter: url(#heroNeuralNodeGlow);
+        opacity: 0.5;
+        animation: heroNeuralNodePulse 2.9s ease-in-out infinite;
+      }
+      .hero-neural-svg .hero-neural-node:nth-child(1) { animation-delay: 0s; }
+      .hero-neural-svg .hero-neural-node:nth-child(2) { animation-delay: 0.18s; }
+      .hero-neural-svg .hero-neural-node:nth-child(3) { animation-delay: 0.36s; }
+      .hero-neural-svg .hero-neural-node:nth-child(4) { animation-delay: 0.54s; }
+      .hero-neural-svg .hero-neural-node:nth-child(5) { animation-delay: 0.72s; }
+      .hero-neural-svg .hero-neural-node:nth-child(6) { animation-delay: 0.9s; }
+      .hero-neural-svg .hero-neural-node:nth-child(7) { animation-delay: 1.08s; }
+      .hero-neural-svg .hero-neural-node:nth-child(8) { animation-delay: 1.26s; }
+      .hero-neural-svg .hero-neural-node:nth-child(9) { animation-delay: 1.44s; }
+      .hero-neural-svg .hero-neural-node:nth-child(10) { animation-delay: 1.62s; }
+      .hero-neural-svg .hero-neural-node:nth-child(11) { animation-delay: 1.8s; }
+      .hero-neural-svg .hero-neural-node:nth-child(12) { animation-delay: 1.98s; }
+      .hero-neural-svg .hero-neural-node:nth-child(13) { animation-delay: 2.16s; }
+      .hero-neural-svg .hero-neural-node:nth-child(14) { animation-delay: 2.34s; }
+      .hero-neural-svg .hero-neural-node:nth-child(15) { animation-delay: 2.52s; }
+      .hero-neural-svg .hero-neural-node:nth-child(16) { animation-delay: 2.7s; }
+      @keyframes heroNeuralNodePulse {
+        0%, 100% { opacity: 0.38; }
+        50% { opacity: 0.95; }
       }
       .hero-chat-glow {
+        position: relative;
+        z-index: 1;
         width: 100%;
-        max-width: 520px;
+        max-width: min(550px, 100%);
         padding: 4px;
         border-radius: 24px;
         background: linear-gradient(135deg, rgba(69, 214, 255, 0.65), rgba(106, 107, 255, 0.55), rgba(186, 87, 255, 0.65));
@@ -409,27 +831,69 @@
       }
 
       .tilt { transform-style: preserve-3d; transition: transform 0.22s ease, border-color 0.22s ease; }
-      .services-grid, .how-grid, .pricing-grid, .testimonials-grid, .faq-grid {
+      .services-grid, .how-flow, .pricing-grid, .testimonials-grid, .faq-grid {
         margin-top: 30px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 14px;
         align-items: start;
       }
-      .pricing-grid { padding-top: 16px; }
-      .service, .step, .price, .testimonial, .faq-item { padding: 24px; }
-      .service h3, .step h3, .price h3, .testimonial h3 { margin: 0 0 8px; }
-      .service p, .step p, .price p, .testimonial p, .faq-item p { margin: 0; color: var(--muted); }
-      .step-num {
-        width: 34px;
-        height: 34px;
-        border-radius: 11px;
-        display: inline-flex;
+      .how-flow {
+        grid-template-columns: minmax(0, 1fr) minmax(28px, 44px) minmax(0, 1fr) minmax(28px, 44px) minmax(0, 1fr);
+        gap: 14px 10px;
+        align-items: stretch;
+      }
+      .how-connector {
+        display: flex;
         align-items: center;
         justify-content: center;
+        align-self: center;
+        color: rgba(140, 155, 255, 0.42);
+        pointer-events: none;
+        min-height: 48px;
+      }
+      .how-connector-svg {
+        display: block;
+        flex-shrink: 0;
+      }
+      .pricing-grid { padding-top: 16px; }
+      .service, .step, .price, .testimonial, .faq-item { padding: 24px; }
+      .service-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+        flex-shrink: 0;
+      }
+      .service-icon svg {
+        width: 48px;
+        height: 48px;
+        display: block;
+      }
+      .service h3, .step h3, .price h3, .testimonial h3 { margin: 0 0 8px; }
+      .service p, .step p, .price p, .testimonial p, .faq-item p { margin: 0; color: var(--muted); }
+      .step {
+        position: relative;
+        overflow: hidden;
+      }
+      .step-bg-num {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-52%);
+        font-size: 120px;
         font-weight: 800;
-        background: linear-gradient(120deg, rgba(106, 107, 255, 0.35), rgba(69, 214, 255, 0.3));
-        border: 1px solid rgba(149, 160, 255, 0.44);
+        letter-spacing: -0.07em;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        color: rgba(139, 92, 246, 0.12);
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+      }
+      .step h3,
+      .step p {
+        position: relative;
+        z-index: 1;
       }
 
       .project { margin-top: 30px; padding: 26px; }
@@ -618,6 +1082,18 @@
         .hero-chat-glow { animation: none; }
         .hero-typing span { animation: none; }
         .hero-msg { animation: none !important; opacity: 1 !important; transform: none !important; }
+        .hero-title-gridlines,
+        .hero-title-nodes,
+        .hero-title-pulse { animation: none !important; }
+        .hero-neural-edge,
+        .hero-neural-node { animation: none !important; stroke-dashoffset: 0 !important; }
+        .hero-neural-edge { opacity: 0.48; }
+        .hero-neural-node { opacity: 0.72; }
+        .hero-macbook-wrap:hover .hero-macbook,
+        .hero-macbook { transform: none !important; }
+        .pricing-grid .price:hover,
+        .pricing-grid .price.price-pop:hover { transform: none !important; }
+        .pricing-grid .price:hover .amount::after { animation: none !important; opacity: 0 !important; }
       }
       .metrics {
         margin-top: 14px;
@@ -683,10 +1159,71 @@
         border: 1px solid rgba(222, 171, 255, 0.58);
         background: linear-gradient(120deg, rgba(164, 84, 255, 0.95), rgba(99, 66, 255, 0.9));
       }
-      .amount { margin: 2px 0 8px; font-size: clamp(1.8rem, 3vw, 2.2rem); font-weight: 900; }
-      .amount small { font-size: 0.95rem; color: var(--muted); }
       .price ul { margin: 14px 0 0; padding: 0; list-style: none; }
       .price li { margin-bottom: 8px; color: #d8dfff; }
+
+      .pricing-grid .price {
+        position: relative;
+        z-index: 1;
+        transition:
+          transform 0.45s cubic-bezier(0.2, 0.85, 0.2, 1),
+          box-shadow 0.45s ease,
+          border-color 0.45s ease;
+      }
+      .pricing-grid .price:hover {
+        z-index: 5;
+        transform: scale(1.03);
+        border-color: rgba(198, 170, 255, 0.55);
+        box-shadow:
+          0 24px 52px rgba(4, 7, 24, 0.55),
+          0 0 0 1px rgba(186, 120, 255, 0.38),
+          0 0 52px rgba(186, 87, 255, 0.42),
+          0 0 96px rgba(106, 107, 255, 0.28);
+      }
+      .pricing-grid .price.price-pop:hover {
+        transform: scale(1.133);
+        box-shadow:
+          0 28px 58px rgba(60, 25, 100, 0.55),
+          0 0 0 1px rgba(200, 150, 255, 0.5),
+          0 0 64px rgba(186, 87, 255, 0.55),
+          0 0 110px rgba(120, 60, 220, 0.35);
+      }
+      .amount {
+        margin: 2px 0 8px;
+        font-size: clamp(1.8rem, 3vw, 2.2rem);
+        font-weight: 900;
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+      }
+      .amount small { font-size: 0.95rem; color: var(--muted); }
+      .amount::after {
+        content: "";
+        position: absolute;
+        left: -40%;
+        top: -10%;
+        width: 55%;
+        height: 120%;
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 255, 255, 0.12),
+          rgba(220, 200, 255, 0.55),
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transform: skewX(-16deg) translateX(-130%);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .pricing-grid .price:hover .amount::after {
+        animation: amountShine 0.85s ease-out forwards;
+      }
+      @keyframes amountShine {
+        0% { transform: skewX(-16deg) translateX(-130%); opacity: 0; }
+        12% { opacity: 1; }
+        100% { transform: skewX(-16deg) translateX(260%); opacity: 0; }
+      }
 
       .contact-grid {
         margin-top: 30px;
@@ -776,8 +1313,8 @@
 
       .floating-call {
         position: fixed;
-        right: 18px;
-        bottom: 18px;
+        right: max(18px, env(safe-area-inset-right, 0px));
+        bottom: max(28px, calc(22px + env(safe-area-inset-bottom, 0px)));
         z-index: 80;
         max-width: min(300px, calc(100vw - 36px));
         font-size: 0.86rem;
@@ -810,27 +1347,6 @@
       }
       @media (prefers-reduced-motion: reduce) {
         .marquee-track { animation: none; justify-content: center; flex-wrap: wrap; white-space: normal; text-align: center; }
-      }
-
-      .trust-mini {
-        padding: 10px 0 14px;
-        border-bottom: 1px solid rgba(110, 124, 200, 0.18);
-        background: rgba(6, 8, 20, 0.5);
-      }
-      .trust-mini-inner {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px 22px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: #aeb9e8;
-      }
-      .trust-mini-inner span {
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(130, 142, 220, 0.28);
-        background: rgba(106, 107, 255, 0.08);
       }
 
       .pricing-guarantee {
@@ -976,8 +1492,41 @@
 
       .mobile-dock { display: none; }
       @media (max-width: 980px) {
-        .hero-grid, .services-grid, .how-grid, .pricing-grid, .testimonials-grid, .faq-grid, .metrics, .foot-wrap, .showcase-grid {
+        .hero-grid, .services-grid, .how-flow, .pricing-grid, .testimonials-grid, .faq-grid, .metrics, .foot-wrap, .showcase-grid {
           grid-template-columns: 1fr;
+        }
+        .how-flow {
+          gap: 14px;
+        }
+        .how-connector {
+          min-height: 28px;
+          padding: 4px 0;
+        }
+        .how-connector-svg {
+          transform: rotate(90deg);
+        }
+        .hero-left {
+          text-align: center;
+          align-items: center;
+          padding-left: env(safe-area-inset-left, 0px);
+          justify-content: flex-start;
+        }
+        .hero-left h1,
+        .hero-left p {
+          text-align: center;
+        }
+        .hero-left p {
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .hero-macbook-wrap {
+          margin-left: auto;
+          margin-right: auto;
+          max-width: min(480px, 100%);
+          justify-content: center;
+        }
+        .hero-macbook {
+          transform: rotateX(7deg) rotateY(-7deg) rotateZ(0);
         }
         .hero-chat-column { justify-content: center; }
         .hero-chat-glow { max-width: 100%; }
@@ -985,6 +1534,9 @@
         .hero-stat-item { max-width: none; min-width: 0; }
         .hero-chat-window { min-height: 360px; max-height: 58vh; }
         .price-pop { transform: scale(1); }
+        .pricing-grid .price.price-pop:hover {
+          transform: scale(1.03);
+        }
         .nav-links a:not(.nav-cta) { display: none; }
         .mobile-dock {
           position: fixed;
@@ -1026,7 +1578,7 @@
         .mobile-dock a.dock-wa svg {
           flex-shrink: 0;
         }
-        .floating-call { bottom: 80px; right: 12px; }
+        .floating-call { bottom: max(100px, calc(92px + env(safe-area-inset-bottom, 0px))); right: 12px; }
       }
     </style>
   </head>
@@ -1059,14 +1611,144 @@
         <span style="left:89%;top:83%;animation-duration:8.8s;"></span>
       </div>
       <div class="wrap hero-grid">
-        <div class="hero-copy reveal">
-          <h1>Votre business, propulsé par l'IA</h1>
+        <div class="hero-left reveal">
+          <div class="hero-title-stack">
+            <div class="hero-title-viz" aria-hidden="true">
+              <div class="hero-title-pulse"></div>
+              <div class="hero-title-gridlines"></div>
+              <div class="hero-title-nodes"></div>
+            </div>
+            <h1>Votre business, propulsé par l'IA</h1>
+          </div>
           <p>
             Un site web premium qui convertit. Une IA qui qualifie vos prospects 24 h/24 et génère des leads pour vous. Passez au digital intelligent — je m'occupe de tout.
           </p>
+          <div class="hero-macbook-wrap" aria-hidden="true">
+            <div class="hero-macbook-glow"></div>
+            <div class="hero-macbook">
+              <div class="hero-macbook-lid">
+                <div class="hero-macbook-camera"></div>
+                <div class="hero-macbook-bezel">
+                  <div class="hero-macbook-screen">
+                    <div class="hero-dash">
+                      <header class="hero-dash-chrome">
+                        <span class="hero-dash-traffic"><i></i><i></i><i></i></span>
+                        <span class="hero-dash-bar">nexia.app / dashboard</span>
+                      </header>
+                      <div class="hero-dash-main">
+                        <div class="hero-dash-content">
+                          <div class="hero-dash-row">
+                            <div class="hero-dash-card hero-dash-card--cyan"><strong>24/7</strong><small>IA disponible</small></div>
+                            <div class="hero-dash-card hero-dash-card--violet"><strong>-80%</strong><small>appels manqués</small></div>
+                            <div class="hero-dash-card hero-dash-card--indigo"><strong>48h</strong><small>délai de livraison</small></div>
+                          </div>
+                          <div class="hero-dash-chart hero-dash-chart--curve">
+                            <span class="hero-dash-chart-label">Nouveaux clients</span>
+                            <svg class="hero-dash-curve-svg" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                              <defs>
+                                <linearGradient id="heroDashCurveStroke" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                                  <stop offset="0%" stop-color="#45d6ff"/>
+                                  <stop offset="55%" stop-color="#6a6bff"/>
+                                  <stop offset="100%" stop-color="#ba57ff"/>
+                                </linearGradient>
+                                <linearGradient id="heroDashCurveFill" x1="100" y1="0" x2="100" y2="48" gradientUnits="userSpaceOnUse">
+                                  <stop offset="0%" stop-color="#6a6bff" stop-opacity="0.45"/>
+                                  <stop offset="100%" stop-color="#050611" stop-opacity="0"/>
+                                </linearGradient>
+                              </defs>
+                              <path class="hero-dash-curve-area" d="M 2 38 C 38 36 72 22 102 18 C 132 14 168 8 198 4 L 198 48 L 2 48 Z" fill="url(#heroDashCurveFill)"/>
+                              <path class="hero-dash-curve-line" d="M 2 38 C 38 36 72 22 102 18 C 132 14 168 8 198 4"/>
+                            </svg>
+                          </div>
+                          <div class="hero-dash-badges">
+                            <span class="hero-dash-badge hero-dash-badge--live">● Assistant IA actif</span>
+                            <span class="hero-dash-badge hero-dash-badge--ok">✓ Site en ligne</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-macbook-base">
+                <div class="hero-macbook-notch"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <aside class="hero-chat-column reveal" id="heroChatRoot">
-          <div class="hero-chat-glow">
+          <div class="hero-chat-stack">
+            <div class="hero-chat-neural">
+              <svg class="hero-neural-svg" viewBox="0 0 520 640" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="heroNeuralLineGrad" x1="0" y1="0" x2="520" y2="640" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#45d6ff"/>
+                    <stop offset="48%" stop-color="#6a6bff"/>
+                    <stop offset="100%" stop-color="#ba57ff"/>
+                  </linearGradient>
+                  <radialGradient id="heroNeuralNodeGrad" cx="35%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#f0fbff"/>
+                    <stop offset="45%" stop-color="#45d6ff"/>
+                    <stop offset="100%" stop-color="#7a4dff"/>
+                  </radialGradient>
+                  <filter id="heroNeuralGlow" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="0.85" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <filter id="heroNeuralNodeGlow" x="-120%" y="-120%" width="340%" height="340%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="1.25" result="nb"/>
+                    <feMerge><feMergeNode in="nb"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <mask id="heroNeuralMask">
+                    <rect width="520" height="640" fill="#fff"/>
+                    <ellipse cx="260" cy="318" rx="118" ry="184" fill="#000"/>
+                  </mask>
+                </defs>
+                <g mask="url(#heroNeuralMask)">
+                  <line class="hero-neural-edge" x1="48" y1="125" x2="168" y2="278"/>
+                  <line class="hero-neural-edge" x1="472" y1="124" x2="352" y2="278"/>
+                  <line class="hero-neural-edge" x1="260" y1="34" x2="260" y2="176"/>
+                  <line class="hero-neural-edge" x1="58" y1="508" x2="178" y2="418"/>
+                  <line class="hero-neural-edge" x1="462" y1="508" x2="342" y2="418"/>
+                  <line class="hero-neural-edge" x1="30" y1="330" x2="156" y2="332"/>
+                  <line class="hero-neural-edge" x1="490" y1="330" x2="364" y2="332"/>
+                  <line class="hero-neural-edge" x1="124" y1="62" x2="208" y2="232"/>
+                  <line class="hero-neural-edge" x1="396" y1="62" x2="312" y2="232"/>
+                  <line class="hero-neural-edge" x1="260" y1="606" x2="260" y2="452"/>
+                  <line class="hero-neural-edge" x1="80" y1="192" x2="214" y2="308"/>
+                  <line class="hero-neural-edge" x1="440" y1="192" x2="306" y2="308"/>
+                  <line class="hero-neural-edge" x1="42" y1="436" x2="172" y2="362"/>
+                  <line class="hero-neural-edge" x1="478" y1="436" x2="348" y2="362"/>
+                  <line class="hero-neural-edge" x1="126" y1="534" x2="226" y2="452"/>
+                  <line class="hero-neural-edge" x1="394" y1="534" x2="294" y2="452"/>
+                  <line class="hero-neural-edge" x1="20" y1="242" x2="118" y2="316"/>
+                  <line class="hero-neural-edge" x1="500" y1="244" x2="402" y2="318"/>
+                  <line class="hero-neural-edge" x1="196" y1="48" x2="250" y2="162"/>
+                  <line class="hero-neural-edge" x1="324" y1="48" x2="270" y2="162"/>
+                  <path class="hero-neural-edge" d="M 18 420 Q 130 520 260 540 Q 390 520 502 420"/>
+                  <path class="hero-neural-edge" d="M 502 220 Q 380 80 260 58 Q 140 80 18 220"/>
+                </g>
+                <g mask="url(#heroNeuralMask)">
+                  <circle class="hero-neural-node" cx="48" cy="125" r="3.8"/>
+                  <circle class="hero-neural-node" cx="472" cy="124" r="3.8"/>
+                  <circle class="hero-neural-node" cx="260" cy="34" r="4"/>
+                  <circle class="hero-neural-node" cx="58" cy="508" r="3.8"/>
+                  <circle class="hero-neural-node" cx="462" cy="508" r="3.8"/>
+                  <circle class="hero-neural-node" cx="30" cy="330" r="3.5"/>
+                  <circle class="hero-neural-node" cx="490" cy="330" r="3.5"/>
+                  <circle class="hero-neural-node" cx="124" cy="62" r="3.6"/>
+                  <circle class="hero-neural-node" cx="396" cy="62" r="3.6"/>
+                  <circle class="hero-neural-node" cx="260" cy="606" r="4"/>
+                  <circle class="hero-neural-node" cx="80" cy="192" r="3.5"/>
+                  <circle class="hero-neural-node" cx="440" cy="192" r="3.5"/>
+                  <circle class="hero-neural-node" cx="42" cy="436" r="3.5"/>
+                  <circle class="hero-neural-node" cx="478" cy="436" r="3.5"/>
+                  <circle class="hero-neural-node" cx="20" cy="242" r="3.4"/>
+                  <circle class="hero-neural-node" cx="500" cy="244" r="3.4"/>
+                </g>
+              </svg>
+            </div>
+            <div class="hero-chat-glow">
             <div class="hero-chat-window">
               <div class="hero-chat-top">
                 <div class="hero-chat-avatar" aria-hidden="true">IA</div>
@@ -1081,6 +1763,7 @@
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </aside>
       </div>
@@ -1116,14 +1799,6 @@
         </div>
       </div>
     </div>
-    <div class="trust-mini">
-      <div class="wrap trust-mini-inner reveal">
-        <span>Propulsé par Claude AI</span>
-        <span>Powered by Voiceflow</span>
-        <span>Intégration Make</span>
-        <span>Brevo</span>
-      </div>
-    </div>
 
     <main>
       <section class="section" id="services">
@@ -1133,14 +1808,58 @@
           <p class="lead">3 services intégrés pour vous aider à convertir plus, plus vite.</p>
           <div class="services-grid">
             <article class="service glass reveal tilt" data-tilt>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="gradSvcGlobe" x1="2" y1="4" x2="22" y2="20" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#45d6ff"/>
+                      <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="12" cy="12" r="9" stroke="url(#gradSvcGlobe)" stroke-width="1.35" fill="none"/>
+                  <path d="M3 12h18" stroke="url(#gradSvcGlobe)" stroke-width="1.1" stroke-linecap="round"/>
+                  <ellipse cx="12" cy="12" rx="3.8" ry="9" stroke="url(#gradSvcGlobe)" stroke-width="1.15" fill="none"/>
+                  <path d="M12 3c2.2 2.8 3.5 5.6 3.5 9s-1.3 6.2-3.5 9c-2.2-2.8-3.5-5.6-3.5-9s1.3-6.2 3.5-9" stroke="url(#gradSvcGlobe)" stroke-width="1.05" fill="none"/>
+                </svg>
+              </div>
               <h3>Site vitrine premium</h3>
               <p>Design haut de gamme, copywriting conversion et structure orientée ROI.</p>
             </article>
             <article class="service glass reveal tilt" data-tilt>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="gradSvcBot" x1="2" y1="3" x2="22" y2="21" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#45d6ff"/>
+                      <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Deux bulles de dialogue (style conversation / chatbot) -->
+                  <rect x="2.5" y="4.5" width="11.5" height="8" rx="2" stroke="url(#gradSvcBot)" stroke-width="1.25" fill="none"/>
+                  <path d="M5.2 12.5 3.8 15.8 7.8 13.6" stroke="url(#gradSvcBot)" stroke-width="1.25" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                  <rect x="10" y="10.5" width="11.5" height="8.5" rx="2" stroke="url(#gradSvcBot)" stroke-width="1.25" fill="none"/>
+                  <path d="M18.2 19 20.5 21.8 17 20.2" stroke="url(#gradSvcBot)" stroke-width="1.25" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                  <path d="M12.4 14.2h6.8M12.4 16.4h4.6" stroke="url(#gradSvcBot)" stroke-width="1.05" stroke-linecap="round"/>
+                  <path d="M5 7.8h6.2M5 9.6h4.4" stroke="url(#gradSvcBot)" stroke-width="1.05" stroke-linecap="round" opacity="0.85"/>
+                </svg>
+              </div>
               <h3>Chatbot IA</h3>
               <p>Qualification des prospects 24/7 avec scénarios conversationnels personnalisés.</p>
             </article>
             <article class="service glass reveal tilt" data-tilt>
+              <div class="service-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="gradSvcMail" x1="2" y1="5" x2="22" y2="19" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#45d6ff"/>
+                      <stop offset="100%" stop-color="#a855f7"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M3 8h18v10H3V8z" stroke="url(#gradSvcMail)" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+                  <path d="M3 8l9 6 9-6" stroke="url(#gradSvcMail)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                  <path d="M14.5 11.5l-1.3 2.4h2.2L13.2 17" stroke="url(#gradSvcMail)" stroke-width="1.45" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
               <h3>Automatisation des e-mails</h3>
               <p>E-mails automatiques envoyés à chaque nouveau client</p>
             </article>
@@ -1153,19 +1872,31 @@
           <div class="tag"><span class="tag-dot"></span>Comment ça marche</div>
           <h2 class="title">3 étapes simples pour activer votre machine de croissance IA</h2>
           <p class="lead">Un processus clair, rapide et efficace pour transformer votre présence digitale.</p>
-          <div class="how-grid">
+          <div class="how-flow">
             <article class="step glass reveal tilt" data-tilt>
-              <div class="step-num">1</div>
+              <span class="step-bg-num" aria-hidden="true">01</span>
               <h3>On analyse votre situation</h3>
               <p>Analyse de votre cible, de vos objectifs et de vos points de friction business.</p>
             </article>
+            <div class="how-connector" aria-hidden="true">
+              <svg class="how-connector-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/>
+                <path d="M13 7l5 5-5 5"/>
+              </svg>
+            </div>
             <article class="step glass reveal tilt" data-tilt>
-              <div class="step-num">2</div>
+              <span class="step-bg-num" aria-hidden="true">02</span>
               <h3>Design & intégration IA</h3>
               <p>Création d'une vitrine haut de gamme avec chatbot et scénarios intelligents.</p>
             </article>
+            <div class="how-connector" aria-hidden="true">
+              <svg class="how-connector-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/>
+                <path d="M13 7l5 5-5 5"/>
+              </svg>
+            </div>
             <article class="step glass reveal tilt" data-tilt>
-              <div class="step-num">3</div>
+              <span class="step-bg-num" aria-hidden="true">03</span>
               <h3>On met en ligne et on suit les résultats</h3>
               <p>Mise en ligne, suivi des KPI et optimisations continues pour accélérer vos résultats.</p>
             </article>
@@ -1233,7 +1964,7 @@
           <h2 class="title">Ce que disent nos clients</h2>
           <div class="testimonials-grid">
             <article class="testimonial glass reveal tilt" data-tilt>
-              <h3>Dr. Laurent Blanc — Médecin généraliste Lyon</h3>
+              <h3>Dr. Laurent Teotti — Médecin généraliste Lyon</h3>
               <p>« Nexia a clarifié notre offre et automatisé la prise de contact. Notre secrétariat gagne un temps précieux chaque jour. »</p>
               <div class="testimonial-meta"><span class="testimonial-stars">⭐⭐⭐⭐⭐</span><span class="testimonial-when">il y a 2 semaines</span></div>
             </article>
@@ -1258,7 +1989,7 @@
           <p class="lead">Pas sûr de ce qu'il vous faut ? On vous guide lors de l'appel gratuit.</p>
           <div class="pricing-banner">🔥 Le Game Changer — Le chatbot IA qui travaille pour vous 24h/24 pendant que vous dormez</div>
           <div class="pricing-grid">
-            <article class="price glass reveal tilt" data-tilt>
+            <article class="price glass reveal">
               <h3>Site vitrine</h3>
               <div class="amount">400<small>€</small></div>
               <ul>
@@ -1267,7 +1998,7 @@
                 <li>Livraison prête à déployer</li>
               </ul>
             </article>
-            <article class="price glass price-pop reveal tilt" data-tilt>
+            <article class="price glass price-pop reveal">
               <h3>Pack complet</h3>
               <div class="amount">600<small>€ + 100 €/mois</small></div>
               <ul>
@@ -1276,7 +2007,7 @@
                 <li>On s'occupe de tout chaque mois, vous ne faites rien</li>
               </ul>
             </article>
-            <article class="price glass reveal tilt" data-tilt>
+            <article class="price glass reveal">
               <h3>Chatbot seul</h3>
               <div class="amount">300<small>€ + 100 €/mois</small></div>
               <ul>
@@ -1346,7 +2077,7 @@
                 <div class="contact-connect-row">
                   <div class="contact-connect-row-head">📧 Email</div>
                   <p class="contact-connect-plain" style="margin:0;">
-                    <a class="contact-connect-mail" href="mailto:harisganapro@gmail.com">harisganapro@gmail.com</a>
+                    <a class="contact-connect-mail" href="mailto:contact@nexia.fr">contact@nexia.fr</a>
                   </p>
                 </div>
                 <div class="contact-connect-row">
@@ -1388,7 +2119,7 @@
         </div>
         <div>
           <strong>Contact</strong>
-          <a href="mailto:contact@nexia-agency.com">contact@nexia-agency.com</a>
+          <a href="mailto:contact@nexia.fr">contact@nexia.fr</a>
           <a href="tel:+33613812859">06 13 81 28 59</a>
         </div>
       </div>
