@@ -186,12 +186,10 @@
       }
       .nav-links { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
       .nav-links a { color: #d4ddff; text-decoration: none; font-size: 0.92rem; }
-      .nav-toggle {
+      .menu-burger {
         display: none;
-        flex-direction: column;
-        justify-content: center;
         align-items: center;
-        gap: 5px;
+        justify-content: center;
         width: 44px;
         height: 44px;
         padding: 0;
@@ -199,33 +197,76 @@
         border-radius: 10px;
         background: rgba(106, 107, 255, 0.14);
         color: #d4ddff;
+        font-size: 1.35rem;
+        line-height: 1;
         cursor: pointer;
         flex-shrink: 0;
-        transition: background 0.2s ease, border-color 0.2s ease;
       }
-      .nav-toggle:hover {
+      .menu-burger:hover {
         background: rgba(106, 107, 255, 0.24);
         border-color: rgba(160, 172, 255, 0.5);
       }
-      .nav-toggle-bar {
-        display: block;
-        width: 20px;
-        height: 2px;
-        border-radius: 1px;
-        background: currentColor;
-        transition: transform 0.25s ease, opacity 0.2s ease;
-      }
-      .nav.is-open .nav-toggle-bar:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
-      }
-      .nav.is-open .nav-toggle-bar:nth-child(2) {
-        opacity: 0;
-      }
-      .nav.is-open .nav-toggle-bar:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
-      }
-      .nav-mobile-layer {
+      .mobile-menu {
         display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #0A0A14;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: max(80px, calc(64px + env(safe-area-inset-top, 0px))) 24px max(32px, env(safe-area-inset-bottom, 0px));
+      }
+      .mobile-menu.is-open {
+        display: flex;
+      }
+      .mobile-menu__close {
+        position: absolute;
+        top: max(16px, env(safe-area-inset-top, 0px));
+        right: max(16px, env(safe-area-inset-right, 0px));
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 1px solid rgba(137, 149, 255, 0.4);
+        border-radius: 12px;
+        background: rgba(106, 107, 255, 0.15);
+        color: #eef2ff;
+        font-size: 1.5rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+      .mobile-menu__close:hover {
+        background: rgba(106, 107, 255, 0.28);
+      }
+      .mobile-menu__nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: 100%;
+        max-width: 380px;
+      }
+      .mobile-menu__nav a {
+        display: block;
+        width: 100%;
+        padding: 18px 24px;
+        text-align: center;
+        font-size: clamp(1.22rem, 4.8vw, 1.5rem);
+        font-weight: 600;
+        color: #eef2ff;
+        text-decoration: none;
+        letter-spacing: -0.02em;
+        border-radius: 12px;
+        transition: color 0.2s ease, background 0.2s ease;
+      }
+      .mobile-menu__nav a:hover,
+      .mobile-menu__nav a:focus-visible {
+        color: #fff;
+        background: rgba(106, 107, 255, 0.12);
       }
       body.nav-menu-open {
         overflow: hidden;
@@ -1589,109 +1630,10 @@
         .pricing-grid .price.price-pop:hover {
           transform: scale(1.03);
         }
-        .nav-toggle { display: inline-flex; }
+        .menu-burger { display: inline-flex; }
         .nav-end { gap: 10px; }
-        .nav-cta { padding: 10px 14px; font-size: 0.88rem; }
-        .nav-links--desktop { display: none; }
-        .nav-mobile-layer {
-          display: block;
-          position: fixed;
-          inset: 0;
-          z-index: 200;
-          visibility: hidden;
-          pointer-events: none;
-        }
-        .nav.is-open .nav-mobile-layer {
-          visibility: visible;
-          pointer-events: auto;
-        }
-        .nav-overlay {
-          position: absolute;
-          inset: 0;
-          background: rgba(2, 4, 14, 0.78);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          opacity: 0;
-          transition: opacity 0.32s ease;
-        }
-        .nav.is-open .nav-overlay {
-          opacity: 1;
-        }
-        .nav-mobile-panel {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          width: 100%;
-          max-width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: max(72px, calc(56px + env(safe-area-inset-top, 0px))) 28px max(32px, env(safe-area-inset-bottom, 0px));
-          background: linear-gradient(165deg, rgba(8, 11, 32, 0.97) 0%, rgba(5, 7, 22, 0.99) 100%);
-          border-left: none;
-          box-shadow: none;
-          transform: translateX(100%);
-          transition: transform 0.36s cubic-bezier(0.2, 0.85, 0.2, 1);
-          z-index: 1;
-        }
-        .nav.is-open .nav-mobile-panel {
-          transform: translateX(0);
-        }
-        .nav-close {
-          position: absolute;
-          top: max(14px, env(safe-area-inset-top, 0px));
-          right: max(14px, env(safe-area-inset-right, 0px));
-          width: 48px;
-          height: 48px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0;
-          border: 1px solid rgba(137, 149, 255, 0.45);
-          border-radius: 12px;
-          background: rgba(106, 107, 255, 0.18);
-          color: #eef2ff;
-          font-size: 1.35rem;
-          line-height: 1;
-          cursor: pointer;
-          z-index: 2;
-          transition: background 0.2s ease, border-color 0.2s ease;
-        }
-        .nav-close:hover {
-          background: rgba(106, 107, 255, 0.32);
-          border-color: rgba(160, 172, 255, 0.55);
-        }
-        .nav-mobile-links {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
-          width: 100%;
-          max-width: 340px;
-          margin: 0 auto;
-        }
-        .nav-mobile-links a {
-          display: block;
-          width: 100%;
-          padding: 16px 20px;
-          text-align: center;
-          font-size: 1.12rem;
-          font-weight: 600;
-          color: #eef2ff;
-          text-decoration: none;
-          border-radius: 12px;
-          border: 1px solid transparent;
-          transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        }
-        .nav-mobile-links a:hover,
-        .nav-mobile-links a:focus-visible {
-          background: rgba(106, 107, 255, 0.16);
-          border-color: rgba(137, 149, 255, 0.35);
-          color: #fff;
-        }
+        .nav-links--desktop,
+        .nav-cta { display: none !important; }
         .mobile-dock {
           position: fixed;
           left: 50%;
@@ -1754,39 +1696,27 @@
           <a class="btn btn-secondary nav-cta magnetic" href="#contact">Contact</a>
           <button
             type="button"
-            class="nav-toggle"
-            id="navToggle"
+            class="menu-burger"
+            id="menuBurger"
             aria-expanded="false"
-            aria-controls="navMobileMenu"
+            aria-controls="mobileMenu"
             aria-label="Ouvrir le menu"
-          >
-            <span class="nav-toggle-bar" aria-hidden="true"></span>
-            <span class="nav-toggle-bar" aria-hidden="true"></span>
-            <span class="nav-toggle-bar" aria-hidden="true"></span>
-          </button>
-        </div>
-      </div>
-      <div
-        class="nav-mobile-layer"
-        id="navMobileMenu"
-        aria-hidden="true"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menu de navigation"
-      >
-        <div class="nav-overlay" id="navOverlay" tabindex="-1"></div>
-        <div class="nav-mobile-panel">
-          <button type="button" class="nav-close" id="navClose" aria-label="Fermer le menu">✕</button>
-          <nav class="nav-mobile-links" aria-label="Navigation principale">
-            <a href="#services">Services</a>
-            <a href="#process">Comment ça marche</a>
-            <a href="#realisations">Réalisations</a>
-            <a href="#tarifs">Tarifs</a>
-            <a href="#faq">FAQ</a>
-          </nav>
+          >☰</button>
         </div>
       </div>
     </nav>
+
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menu de navigation">
+      <button type="button" class="mobile-menu__close" id="mobileMenuClose" aria-label="Fermer le menu">✕</button>
+      <nav class="mobile-menu__nav" aria-label="Navigation principale">
+        <a href="#services">Services</a>
+        <a href="#process">Comment ça marche</a>
+        <a href="#realisations">Réalisations</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
 
     <header class="hero" id="top">
       <div class="hero-particles" aria-hidden="true">
@@ -2345,21 +2275,19 @@
       }, { threshold: 0.14 });
       document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
 
-      (function navMobileMenu() {
-        const nav = document.getElementById("navbar");
-        const toggle = document.getElementById("navToggle");
-        const closeBtn = document.getElementById("navClose");
-        const overlay = document.getElementById("navOverlay");
-        const layer = document.getElementById("navMobileMenu");
-        if (!nav || !toggle || !overlay || !layer) return;
+      (function mobileMenu() {
+        const burger = document.getElementById("menuBurger");
+        const menu = document.getElementById("mobileMenu");
+        const closeBtn = document.getElementById("mobileMenuClose");
+        if (!burger || !menu) return;
 
-        const links = layer.querySelectorAll(".nav-mobile-links a");
+        const links = menu.querySelectorAll(".mobile-menu__nav a");
 
         function setOpen(open) {
-          nav.classList.toggle("is-open", open);
-          toggle.setAttribute("aria-expanded", String(open));
-          toggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
-          layer.setAttribute("aria-hidden", String(!open));
+          menu.classList.toggle("is-open", open);
+          burger.setAttribute("aria-expanded", String(open));
+          burger.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+          menu.setAttribute("aria-hidden", String(!open));
           document.body.classList.toggle("nav-menu-open", open);
         }
 
@@ -2367,14 +2295,13 @@
           setOpen(false);
         }
 
-        toggle.addEventListener("click", () => {
-          setOpen(!nav.classList.contains("is-open"));
+        burger.addEventListener("click", () => {
+          setOpen(!menu.classList.contains("is-open"));
         });
         if (closeBtn) closeBtn.addEventListener("click", closeMenu);
-        overlay.addEventListener("click", closeMenu);
         links.forEach((link) => link.addEventListener("click", closeMenu));
         document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && nav.classList.contains("is-open")) closeMenu();
+          if (e.key === "Escape" && menu.classList.contains("is-open")) closeMenu();
         });
       })();
 
